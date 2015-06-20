@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/welcome"
+        android:scaleType="fitXY"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="       CONTINUE WITH FACEBOOK         "
+        android:id="@+id/login_facebook"
+        android:layout_marginTop="450dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="     CONTINUE WITH GOOGLE     "
+        android:id="@+id/login_google"
+        android:layout_below="@+id/login_facebook"
+        android:layout_alignRight="@+id/login_facebook"
+        android:layout_alignEnd="@+id/login_facebook"
+        android:layout_alignLeft="@+id/login_facebook"
+        android:layout_alignStart="@+id/login_facebook" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP"
+        android:id="@+id/sign_up"
+        android:layout_below="@+id/login_google"
+        android:layout_alignLeft="@+id/login_google"
+        android:layout_alignStart="@+id/login_google" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOG IN"
+        android:id="@+id/log_in"
+        android:layout_below="@+id/login_google"
+        android:layout_alignRight="@+id/login_google"
+        android:layout_alignEnd="@+id/login_google"
+        android:layout_toRightOf="@+id/sign_up"
+        android:layout_marginLeft="5dp" />
+
+</RelativeLayout>
