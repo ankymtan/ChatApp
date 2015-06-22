@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import com.github.nkzawa.socketio.androidchat.R;
 
 /**
- * A login screen that offers login via username.
+ * A login screen that offers login via usernameEt.
  */
 
 public class ActivityWelcome extends FragmentActivity {

@@ -31,7 +31,7 @@ import java.net.URISyntaxException;
 public class FragmentLogin extends Fragment{
 
     private static final String BY_ME = "by me";
-    public static final String ADDRESS = "http://chat.socket.io";
+    public static final String ADDRESS = "http://192.168.0.14:3000";
     private EditText mUsernameEdit;
     private String mUsername;
     private Socket mSocket;
@@ -68,10 +68,11 @@ public class FragmentLogin extends Fragment{
 
         loginFacebook.getBackground().setColorFilter(Color.rgb(59,89,152), PorterDuff.Mode.SRC);
         loginGoogle.getBackground().setColorFilter(Color.rgb(221,75,57), PorterDuff.Mode.SRC);
-        signInButton.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC);
+        signInButton.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC);
 
         loginFacebook.setTextColor(Color.WHITE);
         loginGoogle.setTextColor(Color.WHITE);
+        signInButton.setTextColor(Color.WHITE);
         // Set up the login form.
         mUsernameEdit = (EditText) view.findViewById(R.id.username);
         mUsernameEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -109,7 +110,7 @@ public class FragmentLogin extends Fragment{
 
     /**
      * Attempts to sign in the account specified by the login form.
-     * If there are form errors (invalid username, missing fields, etc.), the
+     * If there are form errors (invalid usernameEt, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -120,7 +121,7 @@ public class FragmentLogin extends Fragment{
         // Store values at the time of the login attempt.
         String username = mUsernameEdit.getText().toString().trim();
 
-        // Check for a valid username.
+        // Check for a valid usernameEt.
         if (TextUtils.isEmpty(username)) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -149,7 +150,7 @@ public class FragmentLogin extends Fragment{
             }
 
             Intent intent = new Intent();
-            intent.putExtra("username", mUsername);
+            intent.putExtra("usernameEt", mUsername);
             intent.putExtra("numUsers", numUsers);
             activity.setResult(Activity.RESULT_OK, intent);
             activity.finish();

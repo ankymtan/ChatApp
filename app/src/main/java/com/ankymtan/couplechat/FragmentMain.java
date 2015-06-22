@@ -369,7 +369,7 @@ public class FragmentMain extends Fragment {
                     String username;
                     String message;
                     try {
-                        username = data.getString("username");
+                        username = data.getString("usernameEt");
                         message = data.getString("message");
                     } catch (JSONException e) {
                         return;
@@ -393,7 +393,7 @@ public class FragmentMain extends Fragment {
                     String username;
                     int numUsers;
                     try {
-                        username = data.getString("username");
+                        username = data.getString("usernameEt");
                         numUsers = data.getInt("numUsers");
                     } catch (JSONException e) {
                         return;
@@ -417,7 +417,7 @@ public class FragmentMain extends Fragment {
                     String username;
                     int numUsers;
                     try {
-                        username = data.getString("username");
+                        username = data.getString("usernameEt");
                         numUsers = data.getInt("numUsers");
                     } catch (JSONException e) {
                         return;
@@ -440,7 +440,7 @@ public class FragmentMain extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
-                        username = data.getString("username");
+                        username = data.getString("usernameEt");
                     } catch (JSONException e) {
                         return;
                     }
@@ -459,7 +459,7 @@ public class FragmentMain extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
-                        username = data.getString("username");
+                        username = data.getString("usernameEt");
                     } catch (JSONException e) {
                         return;
                     }

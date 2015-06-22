@@ -100,7 +100,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
             return;
         }
 
-        mUsername = data.getStringExtra("username");
+        mUsername = data.getStringExtra("usernameEt");
         numUsers = data.getIntExtra("numUsers", 1);
     }
 
