@@ -11,11 +11,11 @@ public class ServerRequest {
 
     }
 
-    public void storeUserInBackground(User user,ServerCallback serverCallback){
+    public void storeUserInBackground(User user,serverCallback serverCallback){
 
     }
 
-    public void fetchUserInBackground(User user, ServerCallback serverCallback){
+    public void fetchUserInBackground(User user, serverCallback serverCallback){
 
     }
 }
