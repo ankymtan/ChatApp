@@ -7,29 +7,30 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 /**
- * Created by An on 10/6/2015.
+ * Created by An on 20/6/2015.
  */
-public class TabAdapter extends FragmentPagerAdapter {
-
+public class TabAdapterWelcome extends FragmentPagerAdapter{
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
 
-    public TabAdapter(FragmentManager fm){
+    public TabAdapterWelcome(FragmentManager fm){
         super(fm);
     }
     @Override
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new FragmentMain();
+                return new FragmentWelcome();
             case 1:
-                return new FragmentSetting();
+                return new FragmentLogin();
+            case 2:
+                return new FragmentRegister();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 2; // Number of tabs
+        return 3; // Number of tabs
     }
 
     @Override
@@ -41,8 +42,8 @@ public class TabAdapter extends FragmentPagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        //registeredFragments.remove(position);
-        //super.destroyItem(container, position, object);
+        registeredFragments.remove(position);
+        super.destroyItem(container, position, object);
     }
 
     public Fragment getRegisteredFragment(int position){

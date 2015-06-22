@@ -49,6 +49,7 @@ public class PluginManager extends Binder{
         packageFilter.addDataScheme("package");
 
         bindOpService();
+
     }
 
     private void fillPluginList() {
@@ -160,6 +161,7 @@ public class PluginManager extends Binder{
 
     class OpServiceConnection implements ServiceConnection {
 
+        @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder boundService) {
             wordCheckerService = WordChecker.Stub.asInterface(boundService);

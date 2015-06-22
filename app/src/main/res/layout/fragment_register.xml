@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:theme="@style/Base.Theme.AppCompat.Light"
+    tools:context=".FragmentLogin">
+
+    <EditText
+        android:id="@+id/username_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="USERNAME"
+        android:textColorHint="@color/black"
+        android:imeActionId="@+id/login"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionUnspecified"
+        android:inputType="textPersonName"
+        android:maxLength="14"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_marginTop="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/register_button"
+        android:layout_alignStart="@+id/register_button"
+        android:layout_alignRight="@+id/register_button"
+        android:layout_alignEnd="@+id/register_button" />
+
+    <EditText
+        android:id="@+id/password_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/username_register"
+        android:layout_alignLeft="@+id/username_register"
+        android:layout_alignRight="@+id/username_register"
+        android:layout_alignStart="@+id/username_register"
+        android:layout_below="@+id/username_register"
+        android:ems="10"
+        android:hint="PASSWORD"
+        android:textColorHint="@color/black"
+        android:inputType="textPassword" />
+    <EditText
+        android:id="@+id/password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="CONFIRM PASSWORD"
+        android:inputType="textPassword"
+        android:layout_below="@+id/password_register"
+        android:layout_alignRight="@+id/password_register"
+        android:layout_alignEnd="@+id/password_register"
+        android:layout_alignLeft="@+id/password_register"
+        android:layout_alignStart="@+id/password_register"
+        android:textColorHint="@color/black"/>
+
+    <Button
+        android:id="@+id/register_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="REGISTER"
+        android:textStyle="bold"
+        android:layout_below="@+id/password_confirm"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/login_facebook"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="FACEBOOK"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/register_button"
+        android:layout_alignStart="@+id/register_button"
+        android:layout_marginTop="7dp" />
+
+    <Button
+        android:id="@+id/login_google"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="GOOGLE"
+        android:layout_alignTop="@+id/login_facebook"
+        android:layout_alignRight="@+id/register_button"
+        android:layout_alignEnd="@+id/register_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="OR"
+        android:id="@+id/textView"
+        android:layout_above="@+id/login_facebook"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

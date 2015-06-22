@@ -48,7 +48,7 @@ import java.util.TimerTask;
 /**
  * A chat fragment containing messages view and input form.
  */
-public class MainFragment extends Fragment {
+public class FragmentMain extends Fragment {
 
     private static final int TYPING_TIMER_LENGTH = 600;
     private static final String BY_ME = "by me";
@@ -68,14 +68,10 @@ public class MainFragment extends Fragment {
 
     {
         try {
-            mSocket = IO.socket("http://chat.socket.io");
+            mSocket = IO.socket(FragmentLogin.ADDRESS);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public MainFragment() {
-        super();
     }
 
     @Override
@@ -237,7 +233,7 @@ public class MainFragment extends Fragment {
                 getActivity().runOnUiThread(backgroundUpdate);
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, 5000);
+        timer.scheduleAtFixedRate(timerTask, 5000 , 5000);
         Log.d(BY_ME, "onViewCreated" + mUsername);
     }
 

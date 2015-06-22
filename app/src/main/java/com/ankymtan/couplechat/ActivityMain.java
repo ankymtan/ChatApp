@@ -4,22 +4,18 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.WindowManager;
 
 import com.github.nkzawa.socketio.androidchat.R;
 
-public class MainActivity extends ActionBarActivity implements onFragmentAttachedListenner{
+public class ActivityMain extends ActionBarActivity implements onFragmentAttachedListenner{
 
     private static final String BY_ME = "by me";
     private static final int REQUEST_LOGIN= 0;
@@ -31,10 +27,10 @@ public class MainActivity extends ActionBarActivity implements onFragmentAttache
 
 
     private int numUsers, selectedFragment;
-    private MainFragment mainFrangment;
+    private FragmentMain mainFrangment;
     private int x,y;
 
-    public MainActivity() {
+    public ActivityMain() {
         super();
     }
 
@@ -67,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements onFragmentAttache
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (positionOffset == 0 & selectedFragment == 0) {
-                    mainFrangment = (MainFragment) mTabAdapter.getRegisteredFragment(0);
+                    mainFrangment = (FragmentMain) mTabAdapter.getRegisteredFragment(0);
                     mainFrangment.getBackgrounder().startTime();
                     mainFrangment.getBackgrounder().onResumeMySurfaceView();
                 } else {
@@ -92,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements onFragmentAttache
         //action Bar
         actionBar = getActionBar();
         //start login
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, ActivityWelcome.class);
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 

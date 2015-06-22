@@ -1,59 +1,79 @@
 package com.ankymtan.couplechat;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.net.URISyntaxException;
 
-
 /**
- * A login screen that offers login via username.
+ * Created by An on 20/6/2015.
  */
-public class LoginActivity extends Activity {
+public class FragmentLogin extends Fragment{
 
+    private static final String BY_ME = "by me";
+    public static final String ADDRESS = "http://chat.socket.io";
     private EditText mUsernameEdit;
-
     private String mUsername;
-
     private Socket mSocket;
+    private Activity activity;
+
     {
         try {
-            mSocket = IO.socket("http://chat.socket.io");
+            mSocket = IO.socket(ADDRESS);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawableResource(R.drawable.login);
-        setContentView(R.layout.activity_login);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return  inflater.inflate(R.layout.fragment_login, container, false);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         //on purpose of hiding input keyboard
-        final InputMethodManager keyboadManager = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+        final InputMethodManager keyboadManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //setup color for buttons
+        Button loginFacebook = (Button) view.findViewById(R.id.login_facebook);
+        Button loginGoogle = (Button) view.findViewById(R.id.login_google);
+        Button signInButton = (Button) view.findViewById(R.id.login_button);
+
+        loginFacebook.getBackground().setColorFilter(Color.rgb(59,89,152), PorterDuff.Mode.SRC);
+        loginGoogle.getBackground().setColorFilter(Color.rgb(221,75,57), PorterDuff.Mode.SRC);
+        signInButton.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC);
+
+        loginFacebook.setTextColor(Color.WHITE);
+        loginGoogle.setTextColor(Color.WHITE);
         // Set up the login form.
-        mUsernameEdit = (EditText) findViewById(R.id.username_input);
+        mUsernameEdit = (EditText) view.findViewById(R.id.username);
         mUsernameEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -66,10 +86,10 @@ public class LoginActivity extends Activity {
         });
 
 
-        Button signInButton = (Button) findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(new OnClickListener() {
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(BY_ME, "button pressed");
                 keyboadManager.hideSoftInputFromWindow(mUsernameEdit.getWindowToken(), 0);
                 attemptLogin();
             }
@@ -80,11 +100,12 @@ public class LoginActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         mSocket.off("login", onLogin);
     }
+
 
     /**
      * Attempts to sign in the account specified by the login form.
@@ -93,6 +114,7 @@ public class LoginActivity extends Activity {
      */
     private void attemptLogin() {
         // Reset errors.
+
         mUsernameEdit.setError(null);
 
         // Store values at the time of the login attempt.
@@ -129,11 +151,8 @@ public class LoginActivity extends Activity {
             Intent intent = new Intent();
             intent.putExtra("username", mUsername);
             intent.putExtra("numUsers", numUsers);
-            setResult(RESULT_OK, intent);
-            finish();
+            activity.setResult(Activity.RESULT_OK, intent);
+            activity.finish();
         }
     };
 }
-
-
-
