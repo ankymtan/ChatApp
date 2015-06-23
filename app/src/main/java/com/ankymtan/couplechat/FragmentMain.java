@@ -52,11 +52,11 @@ public class FragmentMain extends Fragment {
 
     private static final int TYPING_TIMER_LENGTH = 600;
     private static final String BY_ME = "by me";
-    private int messageCounter = 0, numberOfHeart = 0, numUsers = 0, x, y;
+    public int messageCounter = 0, numberOfHeart = 0, numUsers = 0, x, y;
     private Timer timer = new Timer();
     private TimerTask timerTask;
     private RecyclerView mMessagesView;
-    private EditText mInputMessageView;
+    public EditText mInputMessageView;
     private List<Message> mMessages = new ArrayList<Message>();
     private RecyclerView.Adapter mAdapter;
     private boolean mTyping = false;
@@ -64,7 +64,6 @@ public class FragmentMain extends Fragment {
     private String mUsername;
     private Socket mSocket;
     private PluginManager pluginManager;
-    private Backgrounder backgrounder;
 
     {
         try {
@@ -184,10 +183,10 @@ public class FragmentMain extends Fragment {
         mInputMessageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (getBackgrounder().alpha < 255) {
+                if (((ActivityMain) getActivity()).getBackground().onAnimation()) {
                     Log.d(BY_ME, "block cuz drawing");
                     mInputMessageView.setInputType(EditorInfo.TYPE_NULL);
-                } else {
+                }else{
                     mInputMessageView.setInputType(EditorInfo.TYPE_CLASS_TEXT);
                 }
                 return false;
@@ -203,38 +202,6 @@ public class FragmentMain extends Fragment {
             }
         });
 
-        backgrounder = (Backgrounder) view.findViewById(R.id.background);
-
-        //work for background
-        final Runnable backgroundUpdate = new Runnable() {
-            public void run() {
-                if (messageCounter > 0) {
-                    numberOfHeart += messageCounter;
-                } else {
-                    numberOfHeart -= 2;
-                    if (numberOfHeart < 0) {
-                        numberOfHeart = 0;
-                    }
-                    ;
-                }
-                ;
-                //TODO set up when to re-draw: if...then below
-                if (mInputMessageView.getBottom() > y / 4 * 3) {
-                    backgrounder.update(numberOfHeart);
-                }else{
-                    Log.d(BY_ME, "no update cuz typing");
-                }
-                messageCounter = 0;
-            }
-        };
-
-        timerTask = new TimerTask() {
-            public void run() {
-                getActivity().runOnUiThread(backgroundUpdate);
-            }
-        };
-        timer.scheduleAtFixedRate(timerTask, 5000 , 5000);
-        Log.d(BY_ME, "onViewCreated" + mUsername);
     }
 
 
@@ -482,17 +449,11 @@ public class FragmentMain extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        backgrounder.onPauseMySurfaceView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        backgrounder.onResumeMySurfaceView();
-    }
-
-    public Backgrounder getBackgrounder() {
-        return backgrounder;
     }
 }
 

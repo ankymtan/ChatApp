@@ -15,20 +15,26 @@ import android.view.WindowManager;
 
 import com.github.nkzawa.socketio.androidchat.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ActivityMain extends ActionBarActivity implements onFragmentAttachedListenner{
 
     private static final String BY_ME = "by me";
     private static final int REQUEST_LOGIN= 0;
     private TabAdapter mTabAdapter;
     private ActionBar actionBar;
+    private TimerTask timerTask;
+    private Timer timer = new Timer();
 
     ViewPager mViewPager;
     private String mUsername;
 
 
     private int numUsers, selectedFragment;
-    private FragmentMain mainFrangment;
+    private FragmentMain mainFragment;
     private int x,y;
+    private Backgrounder background;
 
     public ActivityMain() {
         super();
@@ -56,37 +62,46 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         x = size.x;
         y = size.y;
         //
+        background = (Backgrounder) findViewById(R.id.background);
         mTabAdapter = new TabAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (positionOffset == 0 & selectedFragment == 0) {
-                    mainFrangment = (FragmentMain) mTabAdapter.getRegisteredFragment(0);
-                    mainFrangment.getBackgrounder().startTime();
-                    mainFrangment.getBackgrounder().onResumeMySurfaceView();
-                } else {
-                    mainFrangment.getBackgrounder().onPauseMySurfaceView();
-                }
-                Log.d(BY_ME, mainFrangment.getBackgrounder().isRunning() + "");
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                selectedFragment = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setPageMargin(x / 90);
-        mViewPager.setPageMarginDrawable(R.color.black);
         //action Bar
         actionBar = getActionBar();
+        //
+        //work for background
+        final Runnable backgroundUpdate = new Runnable() {
+            @Override
+            public void run() {
+                mainFragment = (FragmentMain) mTabAdapter.getRegisteredFragment(0);
+                if(mainFragment == null) return;
+                if (mainFragment.messageCounter > 0) {
+                    mainFragment.numberOfHeart += mainFragment.messageCounter;
+                } else {
+                    mainFragment.numberOfHeart -= 2;
+                    if (mainFragment.numberOfHeart < 0) {
+                        mainFragment.numberOfHeart = 0;
+                    }
+                    ;
+                }
+                ;
+                //TODO set up when to re-draw: if...then below
+                if (mainFragment.mInputMessageView.getBottom() > y / 4 * 3) {
+                    background.update(mainFragment.numberOfHeart);
+                }else{
+                    Log.d(BY_ME, "no update cuz typing");
+                }
+                mainFragment.messageCounter = 0;
+            }
+        };
+
+        timerTask = new TimerTask() {
+            public void run() {
+                runOnUiThread(backgroundUpdate);
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, 0 , 5000);
         //start login
         Intent intent = new Intent(this, ActivityWelcome.class);
         startActivityForResult(intent, REQUEST_LOGIN);
@@ -107,5 +122,21 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        background.onResumeMySurfaceView();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        background.onPauseMySurfaceView();
+    }
+
+    public Backgrounder getBackground(){
+        return background;
     }
 }

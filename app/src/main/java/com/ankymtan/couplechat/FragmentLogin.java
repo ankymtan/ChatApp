@@ -28,14 +28,17 @@ import java.net.URISyntaxException;
 /**
  * Created by An on 20/6/2015.
  */
-public class FragmentLogin extends Fragment{
+public class FragmentLogin extends Fragment implements View.OnClickListener{
+
 
     private static final String BY_ME = "by me";
-    public static final String ADDRESS = "http://192.168.0.14:3000";
-    private EditText mUsernameEdit;
+    //public static final String ADDRESS = "http://192.168.0.14:3000";
+    public static final String ADDRESS = "http://chat.socket.io";
+    private EditText usernameEt, passwordEt;
     private String mUsername;
     private Socket mSocket;
     private Activity activity;
+    private InputMethodManager keyboadManager;
 
     {
         try {
@@ -60,22 +63,23 @@ public class FragmentLogin extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //on purpose of hiding input keyboard
-        final InputMethodManager keyboadManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        keyboadManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //setup color for buttons
         Button loginFacebook = (Button) view.findViewById(R.id.login_facebook);
         Button loginGoogle = (Button) view.findViewById(R.id.login_google);
         Button signInButton = (Button) view.findViewById(R.id.login_button);
 
-        loginFacebook.getBackground().setColorFilter(Color.rgb(59,89,152), PorterDuff.Mode.SRC);
-        loginGoogle.getBackground().setColorFilter(Color.rgb(221,75,57), PorterDuff.Mode.SRC);
+        loginFacebook.getBackground().setColorFilter(Color.rgb(59, 89, 152), PorterDuff.Mode.SRC);
+        loginGoogle.getBackground().setColorFilter(Color.rgb(221, 75, 57), PorterDuff.Mode.SRC);
         signInButton.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC);
 
         loginFacebook.setTextColor(Color.WHITE);
         loginGoogle.setTextColor(Color.WHITE);
         signInButton.setTextColor(Color.WHITE);
         // Set up the login form.
-        mUsernameEdit = (EditText) view.findViewById(R.id.username);
-        mUsernameEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        usernameEt = (EditText) view.findViewById(R.id.username);
+        passwordEt = (EditText) view.findViewById(R.id.password);
+        usernameEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -86,18 +90,20 @@ public class FragmentLogin extends Fragment{
             }
         });
 
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(BY_ME, "button pressed");
-                keyboadManager.hideSoftInputFromWindow(mUsernameEdit.getWindowToken(), 0);
-                attemptLogin();
-            }
-        });
+        signInButton.setOnClickListener(this);
 
         mSocket.on("login", onLogin);
         mSocket.connect();
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.login_button:
+                Log.d(BY_ME, "button pressed");
+                keyboadManager.hideSoftInputFromWindow(usernameEt.getWindowToken(), 0);
+                attemptLogin();
+                break;
+        }
     }
 
     @Override
@@ -114,19 +120,14 @@ public class FragmentLogin extends Fragment{
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        // Reset errors.
-
-        mUsernameEdit.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameEdit.getText().toString().trim();
+        String username = usernameEt.getText().toString().trim();
 
         // Check for a valid usernameEt.
         if (TextUtils.isEmpty(username)) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            mUsernameEdit.setError(getString(R.string.error_field_required));
-            mUsernameEdit.requestFocus();
+            usernameEt.setError(getString(R.string.error_field_required));
+            usernameEt.requestFocus();
             return;
         }
 

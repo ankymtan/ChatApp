@@ -20,6 +20,7 @@
     <color name="blue">#0095ff</color>
     <color name="yellow">#88bf57</color>
     <color name="bird_orange">#ECB61E</color>
+    <color name="black_transparent">#96000000</color>
 
     <array name="username_colors">
         <item>@color/username0</item>

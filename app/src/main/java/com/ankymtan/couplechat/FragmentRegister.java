@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.nkzawa.socketio.androidchat.R;
 
@@ -57,9 +58,20 @@ public class FragmentRegister extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.register_button:
                 if(!chechInputValidity()) return;
-                //TODO register job here
+                User user= new User(username, password, email);
+                registerNewUser(user);
                 break;
         }
+    }
+
+    private void registerNewUser(User user){
+        ServerRequest serverRequest = new ServerRequest(getActivity());
+        serverRequest.storeUserInBackground(user, new serverCallback() {
+            @Override
+            public void done(User returnedUser) {
+                Toast.makeText(getActivity(), "Registered successfully, you can sign in now.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private boolean chechInputValidity(){

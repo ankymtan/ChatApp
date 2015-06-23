@@ -64,9 +64,6 @@ public class Backgrounder extends SurfaceView implements Runnable {
                 if (previousNum == currentNum) {
                     for (int i = 0; i < previousNum; i++) {
                         canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                        if (i == (previousNum / 2 - 1)) {
-                            canvas.drawBitmap(background, 0, 0, null);
-                        }
                     }
                     alpha = 255;
                 } else if (previousNum < currentNum) {
@@ -74,9 +71,6 @@ public class Backgrounder extends SurfaceView implements Runnable {
 
                     for (int i = 0; i < previousNum; i++) {
                         canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                        if (i == (previousNum / 2 - 1)) {
-                            canvas.drawBitmap(background, 0, 0, null);
-                        }
                     }
 
                     for (int i = previousNum; i < currentNum; i++) {
@@ -87,9 +81,6 @@ public class Backgrounder extends SurfaceView implements Runnable {
 
                     for (int i = 0; i < currentNum; i++) {
                         canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                        if (i == (currentNum / 2 - 1)) {
-                            canvas.drawBitmap(background, 0, 0, null);
-                        }
                     }
 
                     for (int i = currentNum; i < previousNum; i++) {
@@ -157,8 +148,8 @@ public class Backgrounder extends SurfaceView implements Runnable {
         resizedHeart4 = Bitmap.createScaledBitmap(heart4, x / 10, x / 10, false);
         //initialize positions of the Heart;
         for (int i = 0; i < 100; i++) {
-            posXs[i] = x / 5 + rand.nextInt(x / 2);
-            posYs[i] = y / 5 + rand.nextInt(y / 3);
+            posXs[i] = x / 5 + rand.nextInt(x / 5*2);
+            posYs[i] = y / 5 + rand.nextInt(y / 6);
             angles[i] = rand.nextInt(360);
             indice[i] = 1 + rand.nextInt(4);
         }
@@ -253,6 +244,12 @@ public class Backgrounder extends SurfaceView implements Runnable {
             resetAlpha();
             startTime();
         }
+    }
+    public boolean onAnimation(){
+        if(alpha <255){
+            return true;
+        }
+        return false;
     }
 
 }
