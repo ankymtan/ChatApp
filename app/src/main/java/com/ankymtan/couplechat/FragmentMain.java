@@ -2,8 +2,6 @@ package com.ankymtan.couplechat;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;

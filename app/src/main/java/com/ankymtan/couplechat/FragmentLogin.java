@@ -32,8 +32,8 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
 
 
     private static final String BY_ME = "by me";
-    //public static final String ADDRESS = "http://192.168.0.14:3000";
-    public static final String ADDRESS = "http://chat.socket.io";
+    public static final String ADDRESS = "http://192.168.0.14:3000";
+    //public static final String ADDRESS = "http://chat.socket.io";
     private EditText usernameEt, passwordEt;
     private String mUsername;
     private Socket mSocket;

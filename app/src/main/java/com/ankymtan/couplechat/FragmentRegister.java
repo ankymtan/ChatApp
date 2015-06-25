@@ -91,6 +91,11 @@ public class FragmentRegister extends Fragment implements View.OnClickListener{
             emailEt.requestFocus();
             return false;
         }
+        if(!isEmailValid(email)){
+            emailEt.setError("Not an email. Please check again :)");
+            emailEt.requestFocus();
+            return false;
+        }
         if(password.isEmpty()){
             passwordEt.setError(getString(R.string.error_field_required));
             passwordEt.requestFocus();
@@ -103,5 +108,9 @@ public class FragmentRegister extends Fragment implements View.OnClickListener{
             return false;
         }
         return true;
+    }
+    //check validity email
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
