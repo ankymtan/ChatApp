@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -17,7 +18,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +39,6 @@ import org.json.JSONObject;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
@@ -50,9 +48,7 @@ public class FragmentMain extends Fragment {
 
     private static final int TYPING_TIMER_LENGTH = 600;
     private static final String BY_ME = "by me";
-    public int messageCounter = 0, numberOfHeart = 0, numUsers = 0, x, y;
-    private Timer timer = new Timer();
-    private TimerTask timerTask;
+    public int messageCounter = 0, numberOfHeart = 0, x, y;
     private RecyclerView mMessagesView;
     public EditText mInputMessageView;
     private List<Message> mMessages = new ArrayList<Message>();
@@ -62,6 +58,7 @@ public class FragmentMain extends Fragment {
     private String mUsername;
     private Socket mSocket;
     private PluginManager pluginManager;
+    private UserLocal userLocal;
 
     {
         try {
@@ -80,9 +77,6 @@ public class FragmentMain extends Fragment {
         mAdapter = new MessageAdapter(activity, mMessages);
         pluginManager.onStart();
         Log.d(BY_ME, "onAttach" + mUsername);
-        onFragmentAttachedListenner mActivity = (onFragmentAttachedListenner) activity;
-        numUsers = mActivity.getNumberUser();
-        mUsername = mActivity.getUsername();
         //get screen size
         WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -91,7 +85,8 @@ public class FragmentMain extends Fragment {
         x = size.x;
         y = size.y;
         //
-
+        userLocal = new UserLocal(activity);
+        mUsername = userLocal.getLoggedInUser().getName();
     }
 
     @Override
@@ -184,7 +179,7 @@ public class FragmentMain extends Fragment {
                 if (((ActivityMain) getActivity()).getBackground().onAnimation()) {
                     Log.d(BY_ME, "block cuz drawing");
                     mInputMessageView.setInputType(EditorInfo.TYPE_NULL);
-                }else{
+                } else {
                     mInputMessageView.setInputType(EditorInfo.TYPE_CLASS_TEXT);
                 }
                 return false;
@@ -205,26 +200,13 @@ public class FragmentMain extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_main, menu);
-        Log.d(BY_ME, "onCreateOption" + mUsername);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        android.support.v7.app.ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        actionBar.setCustomView(R.layout.item_current_friend);
+        TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        textView.setText(userLocal.getCurrentFriend());
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_leave) {
-            leave();
-            return true;
-        }
-
-        Log.d(BY_ME, "onOpselected" + mUsername);
-        return super.onOptionsItemSelected(item);
     }
 
     private void addLog(String message) {
@@ -236,14 +218,9 @@ public class FragmentMain extends Fragment {
         Log.d(BY_ME, "addLog" + mUsername);
     }
 
-    private void addParticipantsLog(int numUsers) {
-        addLog(getResources().getQuantityString(R.plurals.message_participants, numUsers, numUsers));
-        Log.d(BY_ME, "addPart..." + mUsername);
-    }
 
     private void addMessage(String username, String message) {
 
-        if (!username.equals("van an") && !username.equals("keong")) return;
         mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
                 .username(username).message(message).build());
         mAdapter.notifyItemInserted(mMessages.size() - 1);
@@ -295,15 +272,21 @@ public class FragmentMain extends Fragment {
         mInputMessageView.setText("");
         addMessage(mUsername, message);
 
+        JSONObject json = new JSONObject();
+        try {
+            json.put("message", message);
+            json.put("username", userLocal.getLoggedInUser().getName());
+            json.put("currentFriend", userLocal.getCurrentFriend());
+            Log.d(BY_ME, userLocal.getLoggedInUser().getName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         // perform the sending message attempt.
-        mSocket.emit("new message", message);
+        mSocket.emit("new message", json.toString());
     }
 
-    private void leave() {
-        Log.d(BY_ME, "leaving");
-        mUsername = null;
-        mSocket.disconnect();
-    }
 
     private void scrollToBottom() {
         mMessagesView.scrollToPosition(mAdapter.getItemCount() - 1);
@@ -334,7 +317,7 @@ public class FragmentMain extends Fragment {
                     String username;
                     String message;
                     try {
-                        username = data.getString("usernameEt");
+                        username = data.getString("username");
                         message = data.getString("message");
                     } catch (JSONException e) {
                         return;
@@ -356,16 +339,12 @@ public class FragmentMain extends Fragment {
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
                     String username;
-                    int numUsers;
                     try {
-                        username = data.getString("usernameEt");
-                        numUsers = data.getInt("numUsers");
+                        username = data.getString("username");
                     } catch (JSONException e) {
                         return;
                     }
-
                     addLog(getResources().getString(R.string.message_user_joined, username));
-                    addParticipantsLog(numUsers);
                     Log.d(BY_ME, "onuserjoin" + mUsername);
                 }
             });
@@ -380,16 +359,13 @@ public class FragmentMain extends Fragment {
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
                     String username;
-                    int numUsers;
                     try {
-                        username = data.getString("usernameEt");
-                        numUsers = data.getInt("numUsers");
+                        username = data.getString("username");
                     } catch (JSONException e) {
                         return;
                     }
 
                     addLog(getResources().getString(R.string.message_user_left, username));
-                    addParticipantsLog(numUsers);
                     removeTyping(username);
                 }
             });
@@ -405,7 +381,7 @@ public class FragmentMain extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
-                        username = data.getString("usernameEt");
+                        username = data.getString("username");
                     } catch (JSONException e) {
                         return;
                     }
@@ -424,7 +400,7 @@ public class FragmentMain extends Fragment {
                     JSONObject data = (JSONObject) args[0];
                     String username;
                     try {
-                        username = data.getString("usernameEt");
+                        username = data.getString("username");
                     } catch (JSONException e) {
                         return;
                     }
@@ -452,6 +428,14 @@ public class FragmentMain extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("username", userLocal.getLoggedInUser().getName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mSocket.emit("username", json.toString());
+        Log.d(BY_ME, "emit username");
     }
 }
 

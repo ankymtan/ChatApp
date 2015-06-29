@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:id="@+id/item_friend_layout">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/current_friend_pic"
+        android:src="@drawable/avatar_shape"
+        android:background="@drawable/profile_empty"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/current_friend_name"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_alignTop="@+id/current_friend_pic"
+        android:layout_toRightOf="@+id/current_friend_pic"
+        android:layout_toEndOf="@+id/current_friend_pic"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="last chat time"
+        android:id="@+id/last_chat"
+        android:textColor="@android:color/darker_gray"
+        android:layout_below="@+id/current_friend_name"
+        android:layout_alignLeft="@+id/current_friend_name"
+        android:layout_alignStart="@+id/current_friend_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="score"
+        android:id="@+id/score"
+        android:textColor="@color/white"
+        android:background="@drawable/green"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_alignTop="@+id/current_friend_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/current_friend_name" />
+</RelativeLayout>

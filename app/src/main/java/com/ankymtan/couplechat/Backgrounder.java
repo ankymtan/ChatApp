@@ -15,7 +15,9 @@ import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+
 import java.util.Random;
+
 import com.github.nkzawa.socketio.androidchat.R;
 
 /**
@@ -37,9 +39,10 @@ public class Backgrounder extends SurfaceView implements Runnable {
     private float startTime;
     private Themer themer;
     private Paint paint = new Paint();
-    private volatile boolean running = false;
+    private volatile boolean running = false, isEnableBackground = true, isEnableAnimation = true;
     Thread thread = null;
     SurfaceHolder surfaceHolder;
+    private UserLocal userLocal;
 
     @Override
     public void run() {
@@ -59,32 +62,38 @@ public class Backgrounder extends SurfaceView implements Runnable {
                     alpha = 255;
                 }
                 canvas.drawColor(Color.WHITE);
-                canvas.drawBitmap(background, 0, 0, null);
 
-                if (previousNum == currentNum) {
-                    for (int i = 0; i < previousNum; i++) {
-                        canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                    }
-                    alpha = 255;
-                } else if (previousNum < currentNum) {
-                    paint.setAlpha((int) alpha);
 
-                    for (int i = 0; i < previousNum; i++) {
-                        canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                    }
+                if (isEnableBackground) {
+                    canvas.drawBitmap(background, 0, 0, null);
 
-                    for (int i = previousNum; i < currentNum; i++) {
-                        canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], paint);
-                    }
-                } else if (previousNum > currentNum) {
-                    paint.setAlpha((int) (255 - alpha));
+                    if (isEnableAnimation) {
+                        if (previousNum == currentNum) {
+                            for (int i = 0; i < previousNum; i++) {
+                                canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
+                            }
+                            alpha = 255;
+                        } else if (previousNum < currentNum) {
+                            paint.setAlpha((int) alpha);
 
-                    for (int i = 0; i < currentNum; i++) {
-                        canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
-                    }
+                            for (int i = 0; i < previousNum; i++) {
+                                canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
+                            }
 
-                    for (int i = currentNum; i < previousNum; i++) {
-                        canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], paint);
+                            for (int i = previousNum; i < currentNum; i++) {
+                                canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], paint);
+                            }
+                        } else if (previousNum > currentNum) {
+                            paint.setAlpha((int) (255 - alpha));
+
+                            for (int i = 0; i < currentNum; i++) {
+                                canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], null);
+                            }
+
+                            for (int i = currentNum; i < previousNum; i++) {
+                                canvas.drawBitmap(getBitmap(indice[i]), posXs[i], posYs[i], paint);
+                            }
+                        }
                     }
                 }
                 surfaceHolder.unlockCanvasAndPost(canvas);
@@ -128,12 +137,15 @@ public class Backgrounder extends SurfaceView implements Runnable {
     }
 
     public void init(Activity activity) {
+
+        userLocal = new UserLocal(activity);
+
         themer = new Themer(activity);
         background = themer.getBitmap("tree");
-        heart1 = BitmapFactory.decodeResource(activity.getResources(), R.drawable.heart1);
-        heart2 = BitmapFactory.decodeResource(activity.getResources(), R.drawable.heart2);
-        heart3 = BitmapFactory.decodeResource(activity.getResources(), R.drawable.heart3);
-        heart4 = BitmapFactory.decodeResource(activity.getResources(), R.drawable.heart4);
+        heart1 = themer.getBitmap("heart1");
+        heart2 = themer.getBitmap("heart2");
+        heart3 = themer.getBitmap("heart3");
+        heart4 = themer.getBitmap("heart4");
         //get width, height
         WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -148,7 +160,7 @@ public class Backgrounder extends SurfaceView implements Runnable {
         resizedHeart4 = Bitmap.createScaledBitmap(heart4, x / 10, x / 10, false);
         //initialize positions of the Heart;
         for (int i = 0; i < 100; i++) {
-            posXs[i] = x / 5 + rand.nextInt(x / 5*2);
+            posXs[i] = x / 5 + rand.nextInt(x / 5 * 2);
             posYs[i] = y / 5 + rand.nextInt(y / 6);
             angles[i] = rand.nextInt(360);
             indice[i] = 1 + rand.nextInt(4);
@@ -228,6 +240,8 @@ public class Backgrounder extends SurfaceView implements Runnable {
     }
 
     public void update(int num) {
+        isEnableAnimation = userLocal.getEnableAnimation();
+        isEnableBackground = userLocal.getEnableBackground();
         //no update when the background is "onUpdate" alr
         if (alpha > 254) {
             setNumOfHeart(num);
@@ -245,11 +259,11 @@ public class Backgrounder extends SurfaceView implements Runnable {
             startTime();
         }
     }
-    public boolean onAnimation(){
-        if(alpha <255){
+
+    public boolean onAnimation() {
+        if (alpha < 255) {
             return true;
         }
         return false;
     }
-
 }

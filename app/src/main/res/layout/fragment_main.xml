@@ -14,7 +14,8 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:scrollbars="vertical"
-        android:scrollbarStyle="outsideOverlay">
+        android:scrollbarStyle="outsideOverlay"
+        android:layout_alignBottom="@+id/message_input">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -46,7 +47,7 @@
         android:layout_weight="1"
         android:text="Send"
         android:textColor="#FFFFFF"
-        android:background="@color/yellow"
+        android:background="@color/green"
         android:padding="10dp"
         android:layout_alignBottom="@+id/message_input"
         android:layout_toRightOf="@+id/message_input"

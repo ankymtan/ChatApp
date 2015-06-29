@@ -23,7 +23,6 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     private static final String BY_ME = "by me";
     private static final int REQUEST_LOGIN= 0;
     private TabAdapter mTabAdapter;
-    private ActionBar actionBar;
     private TimerTask timerTask;
     private Timer timer = new Timer();
 
@@ -31,10 +30,11 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     private String mUsername;
 
 
-    private int numUsers, selectedFragment;
+    private int selectedFragment;
     private FragmentMain mainFragment;
     private int x,y;
     private Backgrounder background;
+    private UserLocal userLocal;
 
     public ActivityMain() {
         super();
@@ -46,14 +46,10 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     }
 
     @Override
-    public int getNumberUser() {
-        return numUsers;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userLocal = new UserLocal(this);
         //get screen size
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -67,8 +63,6 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        //action Bar
-        actionBar = getActionBar();
         //
         //work for background
         final Runnable backgroundUpdate = new Runnable() {
@@ -102,9 +96,14 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0 , 5000);
-        //start login
-        Intent intent = new Intent(this, ActivityWelcome.class);
-        startActivityForResult(intent, REQUEST_LOGIN);
+        if(userLocal.isLoggedIn()){
+            mUsername = userLocal.getLoggedInUser().getName();
+            Log.d(BY_ME, "logged user" + mUsername);
+        }else {
+            //start login
+            Intent intent = new Intent(this, ActivityWelcome.class);
+            startActivityForResult(intent, REQUEST_LOGIN);
+        }
     }
 
     @Override
@@ -114,14 +113,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
             finish();
             return;
         }
-
-        mUsername = data.getStringExtra("usernameEt");
-        numUsers = data.getIntExtra("numUsers", 1);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        mUsername = data.getStringExtra("username");
     }
 
     @Override

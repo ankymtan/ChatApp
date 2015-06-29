@@ -2,13 +2,101 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_transparent">
+    android:background="@drawable/setting_background">
 
-    <Button
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView2"
+        android:background="@drawable/profile"
+        android:src="@drawable/avatar_shape_blue"
+        android:layout_below="@+id/profile_email"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_centerVertical="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="username"
+        android:id="@+id/profile_username"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Email | Total friend | Male"
+        android:id="@+id/profile_email"
+        android:textColor="@color/white"
+        android:paddingBottom="5dp"
+        android:layout_below="@+id/profile_username"
+        android:layout_centerHorizontal="true" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_friend_list"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/add_friend"></ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="EDIT"
+        android:id="@+id/edit_account"
+        android:paddingTop="5dp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_alignStart="@+id/imageView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="OUT"
+        android:id="@+id/logout"
+        android:paddingTop="5dp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignRight="@+id/imageView2"
+        android:layout_alignEnd="@+id/imageView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Friends List"
+        android:id="@+id/textView2"
+        android:paddingTop="30dp"
+        android:textSize="35dp"
+        android:nestedScrollingEnabled="true"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/edit_account"
+        android:layout_alignLeft="@+id/add_friend"
+        android:layout_alignStart="@+id/add_friend" />
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_friend"
+        android:imeActionLabel="Add"
+        android:imeOptions="actionSend"
+        android:hint="Add more friend here."
+        android:background="@color/green"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:imeActionId="@+id/add_friend_action"
+        android:layout_below="@+id/textView2"
+        android:layout_toLeftOf="@+id/logout"
+        android:layout_toStartOf="@+id/logout"
+        android:padding="10dp" />
+
+
 </RelativeLayout>

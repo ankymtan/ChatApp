@@ -18,10 +18,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private List<Message> mMessages;
     private Themer themer;
+    private UserLocal userLocal;
 
     public MessageAdapter(Context context, List<Message> messages) {
         mMessages = messages;
         themer = new Themer(context);
+        userLocal = new UserLocal(context);
     }
 
     @Override
@@ -47,16 +49,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Message message = mMessages.get(position);
-        if (message.getType() == message.TYPE_MESSAGE && message.getUsername().equals("van an")) {
-            viewHolder.setMessage(message.getMessage());
-            viewHolder.setUsername(message.getUsername());
-            viewHolder.setLeft();
-        }
 
-        if (message.getType() == message.TYPE_MESSAGE && message.getUsername().equals("keong")) {
+        //set right/left side
+        if (message.getType() == message.TYPE_MESSAGE && message.getUsername().equals(userLocal.getLoggedInUser().getName())) {
             viewHolder.setMessage(message.getMessage());
             viewHolder.setUsername(message.getUsername());
             viewHolder.setRight();
+        }else if(message.getType() == message.TYPE_MESSAGE) {
+            viewHolder.setMessage(message.getMessage());
+            viewHolder.setUsername(message.getUsername());
+            viewHolder.setLeft();
         }
 
         if (message.getType() == Message.TYPE_ACTION) {

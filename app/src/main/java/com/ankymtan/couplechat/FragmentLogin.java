@@ -17,28 +17,34 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 
 /**
  * Created by An on 20/6/2015.
  */
-public class FragmentLogin extends Fragment implements View.OnClickListener{
+public class FragmentLogin extends Fragment implements View.OnClickListener {
 
 
     private static final String BY_ME = "by me";
-    public static final String ADDRESS = "http://192.168.0.14:3000";
+    public static final String ADDRESS = "http://192.168.0.6:3000";
+    //public static final String ADDRESS = "http://10.27.4.174:3000";
     //public static final String ADDRESS = "http://chat.socket.io";
     private EditText usernameEt, passwordEt;
     private String mUsername;
     private Socket mSocket;
     private Activity activity;
     private InputMethodManager keyboadManager;
+    ServerRequest serverRequest;
 
     {
         try {
@@ -50,13 +56,14 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+        serverRequest = new ServerRequest(activity);
     }
 
     @Override
@@ -92,12 +99,13 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
 
         signInButton.setOnClickListener(this);
 
-        mSocket.on("login", onLogin);
+        mSocket.on("login respond", onLoginRespond);
         mSocket.connect();
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.login_button:
                 Log.d(BY_ME, "button pressed");
                 keyboadManager.hideSoftInputFromWindow(usernameEt.getWindowToken(), 0);
@@ -110,7 +118,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
     public void onDestroy() {
         super.onDestroy();
 
-        mSocket.off("login", onLogin);
+        mSocket.off("login respond", onLoginRespond);
     }
 
 
@@ -121,9 +129,10 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
      */
     private void attemptLogin() {
 
+        JSONObject json = new JSONObject();
         // Store values at the time of the login attempt.
         String username = usernameEt.getText().toString().trim();
-
+        String password = passwordEt.getText().toString();
         // Check for a valid usernameEt.
         if (TextUtils.isEmpty(username)) {
             usernameEt.setError(getString(R.string.error_field_required));
@@ -131,30 +140,65 @@ public class FragmentLogin extends Fragment implements View.OnClickListener{
             return;
         }
 
+        try {
+            json.put("username", username);
+            json.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         mUsername = username;
 
         // perform the user login attempt.
-        mSocket.emit("add user", username);
+        mSocket.emit("login request", json.toString());
     }
 
-    private Emitter.Listener onLogin = new Emitter.Listener() {
+    private Emitter.Listener onLoginRespond = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             JSONObject data = (JSONObject) args[0];
-
-            int numUsers;
-            Log.d("BY_ME", "onLogin in Login Activity");
+            boolean result = false;
+            String email = null;
+            String password = null;
             try {
-                numUsers = data.getInt("numUsers");
+                result = data.getBoolean("result");
+                email = data.getString("email");
+                password = data.getString("password");
             } catch (JSONException e) {
-                return;
+                e.printStackTrace();
             }
 
-            Intent intent = new Intent();
-            intent.putExtra("usernameEt", mUsername);
-            intent.putExtra("numUsers", numUsers);
-            activity.setResult(Activity.RESULT_OK, intent);
-            activity.finish();
+            //wrong password or usename;
+            if (result) {
+
+                //display message using uIthread
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Login successfully", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                UserLocal userLocal = new UserLocal(getActivity());
+                userLocal.setUserLoggedIn(true);
+                userLocal.storeUser(new User(mUsername, password, email));
+
+                Intent intent = new Intent();
+                intent.putExtra("username", mUsername);
+                activity.setResult(Activity.RESULT_OK, intent);
+                activity.finish();
+
+            } else {
+
+                //display message
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Incorrect Username or Password", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
         }
     };
 }
