@@ -17,7 +17,7 @@
         <activity
             android:name="com.ankymtan.couplechat.ActivityMain"
             android:label="Couple Chat"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,6 +29,11 @@
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat"
             android:windowSoftInputMode="stateHidden" >
+        </activity>
+
+        <activity
+            android:name="com.ankymtan.couplechat.ActivityEditProfile"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 </manifest>

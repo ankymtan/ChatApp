@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:id="@+id/item_friend_layout">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/current_friend_pic"
-        android:src="@drawable/avatar_shape"
+        android:src="@drawable/avatar_shape_green"
         android:background="@drawable/profile_empty"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -21,23 +20,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/current_friend_name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:gravity="center"
         android:layout_alignTop="@+id/current_friend_pic"
         android:layout_toRightOf="@+id/current_friend_pic"
         android:layout_toEndOf="@+id/current_friend_pic"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:textSize="23dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="last chat time"
-        android:id="@+id/current_friend_last_chat"
-        android:textColor="@android:color/darker_gray"
-        android:layout_below="@+id/current_friend_name"
+        android:id="@+id/current_friend_status"
+        android:textColor="@android:color/white"
+        android:layout_alignBottom="@+id/current_friend_pic"
         android:layout_alignLeft="@+id/current_friend_name"
-        android:layout_alignStart="@+id/current_friend_name" />
+        android:layout_alignStart="@+id/current_friend_name"
+        android:textSize="13dp"/>
 
 </RelativeLayout>

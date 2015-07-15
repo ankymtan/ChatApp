@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/login_button"
         android:layout_alignStart="@+id/login_button"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="350dp"
         android:layout_alignRight="@+id/login_button"
         android:layout_alignEnd="@+id/login_button"
         android:textColor="@color/black"
@@ -48,39 +48,35 @@
     <Button
         android:id="@+id/login_button"
         style="?android:textAppearanceSmall"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
-        android:text="Login" />
+        android:text="Login"
+        android:padding="15dp" />
 
     <Button
         android:id="@+id/login_facebook"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="FACEBOOK"
-        android:layout_centerVertical="true"
+        android:text="CONTINUE WITH FACEBOOK"
         android:layout_alignLeft="@+id/login_button"
         android:layout_alignStart="@+id/login_button"
-        android:layout_marginTop="7dp" />
+        android:padding="15dp"
+        android:layout_below="@+id/login_button"
+        android:layout_alignRight="@+id/login_button"
+        android:layout_alignEnd="@+id/login_button" />
 
     <Button
         android:id="@+id/login_google"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="GOOGLE"
-        android:layout_alignTop="@+id/login_facebook"
-        android:layout_alignRight="@+id/login_button"
-        android:layout_alignEnd="@+id/login_button" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="OR"
-        android:textColor="@color/black"
-        android:id="@+id/textView"
-        android:layout_above="@+id/login_facebook"
-        android:layout_centerHorizontal="true" />
+        android:text="CONTINUE WITH GOOGLE"
+        android:padding="15dp"
+        android:layout_below="@+id/login_facebook"
+        android:layout_alignLeft="@+id/login_facebook"
+        android:layout_alignStart="@+id/login_facebook"
+        android:layout_alignRight="@+id/login_facebook"
+        android:layout_alignEnd="@+id/login_facebook" />
 
 </RelativeLayout>

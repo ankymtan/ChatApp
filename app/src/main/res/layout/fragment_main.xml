@@ -15,7 +15,8 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:scrollbars="vertical"
         android:scrollbarStyle="outsideOverlay"
-        android:layout_alignBottom="@+id/message_input">
+        android:layout_above="@+id/message_input"
+        android:paddingBottom="3dp">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -2,7 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/setting_background">
+    android:background="@color/white">
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/setting_background"/>
 
     <ImageView
         android:layout_width="100dp"
@@ -97,6 +108,22 @@
         android:layout_toLeftOf="@+id/logout"
         android:layout_toStartOf="@+id/logout"
         android:padding="10dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/bt_add"
+        android:layout_alignTop="@+id/add_friend"
+        android:layout_alignLeft="@+id/logout"
+        android:layout_alignStart="@+id/logout"
+        android:background="@color/blue"
+        android:layout_alignBottom="@+id/add_friend"
+        android:textColor="@color/white"
+        android:textSize="30dp">
+    </Button>
+
 
 
 </RelativeLayout>

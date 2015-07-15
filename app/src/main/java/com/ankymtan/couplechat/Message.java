@@ -6,49 +6,71 @@ public class Message {
     public static final int TYPE_LOG = 1;
     public static final int TYPE_ACTION = 2;
 
-    private int mType;
-    private String mMessage;
-    private String mUsername;
+    private int type;
+    private String message;
+    private String usernameFrom, usernameTo;
+    private String GMT;
 
     private Message() {}
 
     public int getType() {
-        return mType;
+        return type;
     };
 
     public String getMessage() {
-        return mMessage;
+        return message;
     };
 
-    public String getUsername() {
-        return mUsername;
+    public String getUsernameTo(){
+        return  usernameTo;
+    }
+
+    public String getUsernameFrom() {
+        return usernameFrom;
     };
+
+    public String getGMT(){
+        return GMT;
+    }
 
 
     public static class Builder {
         private final int mType;
-        private String mUsername;
+        private String mUsernameFrom, mUsernameTo;
         private String mMessage;
+        private String mGMT;
 
         public Builder(int type) {
             mType = type;
         }
 
-        public Builder username(String username) {
-            mUsername = username;
+        public Builder usernameFrom(String username) {
+            mUsernameFrom = username;
+            return this;
+        }
+
+        public Builder usernameTo(String username) {
+            mUsernameTo = username;
             return this;
         }
 
         public Builder message(String message) {
-            mMessage = message;
+            this.mMessage = message;
+            return this;
+        }
+
+        public Builder GMT(String GMT){
+            this.mGMT = GMT;
             return this;
         }
 
         public Message build() {
             Message message = new Message();
-            message.mType = mType;
-            message.mUsername = mUsername;
-            message.mMessage = mMessage;
+            message.type = mType;
+            message.usernameFrom = mUsernameFrom;
+            message.usernameTo = mUsernameTo;
+            message.message = mMessage;
+            message.GMT = mGMT;
             return message;
         }
     }

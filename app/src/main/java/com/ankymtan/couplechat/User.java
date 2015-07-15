@@ -5,6 +5,7 @@ package com.ankymtan.couplechat;
  */
 public class User {
     private String name, password, email;
+    private int unreadCounter; // count number of unread message send from this user
     public User(String name, String password, String email){
         this.name = name;
         this.password = password;
@@ -14,6 +15,11 @@ public class User {
     public User(String name, String password){
         this.name = name;
         this.password = password;
+    }
+
+    public User(String name, int unreadCounter){
+        this.name = name;
+        this.unreadCounter = unreadCounter;
     }
 
     public User(String name){
@@ -30,6 +36,10 @@ public class User {
 
     public String getEmail(){
         return email;
+    }
+
+    public int getUnreadCounter(){
+        return unreadCounter;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.ankymtan.couplechat;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -49,21 +51,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Message message = mMessages.get(position);
+        viewHolder.setMessage(message.getMessage());
+        viewHolder.setUsername(message.getUsernameFrom());
+        viewHolder.setTime(message.getGMT());
 
         //set right/left side
-        if (message.getType() == message.TYPE_MESSAGE && message.getUsername().equals(userLocal.getLoggedInUser().getName())) {
-            viewHolder.setMessage(message.getMessage());
-            viewHolder.setUsername(message.getUsername());
+        if (message.getType() == message.TYPE_MESSAGE && message.getUsernameFrom().equals(userLocal.getLoggedInUser().getName())) {
             viewHolder.setRight();
-        }else if(message.getType() == message.TYPE_MESSAGE) {
-            viewHolder.setMessage(message.getMessage());
-            viewHolder.setUsername(message.getUsername());
+        }else if(message.getType() == message.TYPE_MESSAGE && message.getUsernameFrom().equals("system advice")) {
+            viewHolder.setAdvice();
+        }else{
             viewHolder.setLeft();
         }
 
         if (message.getType() == Message.TYPE_ACTION) {
             viewHolder.setMessage(message.getMessage());
-            viewHolder.setUsername(message.getUsername());
+            viewHolder.setUsername(message.getUsernameFrom());
         }
     }
 
@@ -80,14 +83,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mUsernameView;
         private TextView mMessageView;
+        private TextView mTimeView;
         LinearLayout messageLayout;
+        LinearLayout messageBackground;
+
+        private Drawable left, right;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            left = themer.getDrawable("left");
+            right = themer.getDrawable("right");
+
             mUsernameView = (TextView) itemView.findViewById(R.id.username);
             mMessageView = (TextView) itemView.findViewById(R.id.message);
+            mTimeView = (TextView) itemView.findViewById(R.id.time);
             messageLayout = (LinearLayout) itemView.findViewById(R.id.message_row);
+            messageBackground = (LinearLayout) itemView.findViewById(R.id.message_background);
         }
 
         public void setUsername(String username) {
@@ -101,16 +113,28 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             mMessageView.setGravity(Gravity.RIGHT);
         }
 
+        public void setTime(String GMT){
+            if(null == mTimeView) return;
+            mTimeView.setText(GMT.substring(10,16));
+        }
+
         public void setLeft() {
             if (null == messageLayout) return;
             messageLayout.setGravity(Gravity.LEFT);
-            mMessageView.setBackground(themer.getDrawable("left"));
+            messageBackground.setBackground(left);
         }
 
         public void setRight() {
             if (null == messageLayout) return;
             messageLayout.setGravity(Gravity.RIGHT);
-            mMessageView.setBackground(themer.getDrawable("right"));
+            messageBackground.setBackground(right);
+        }
+
+        public void setAdvice() {
+            if(null == messageLayout) return;
+            messageLayout.setGravity(Gravity.RIGHT);
+            messageBackground.setBackgroundResource(R.drawable.orange);
+            mMessageView.setTextColor(Color.WHITE);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.ankymtan.couplechat;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.Menu;
 import android.view.WindowManager;
 
 import com.github.nkzawa.socketio.androidchat.R;
@@ -63,6 +61,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setCurrentItem(1);
         //
         //work for background
         final Runnable backgroundUpdate = new Runnable() {

@@ -5,4 +5,5 @@ package com.ankymtan.couplechat;
  */
 public interface onFragmentAttachedListenner {
     public String getUsername();
+
 }

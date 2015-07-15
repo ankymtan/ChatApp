@@ -6,6 +6,7 @@ package com.ankymtan.couplechat;
 interface WordChecker {
 
     String check( in String originalMessage);
+    boolean isPositive();
 
     //void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
            // double aDouble, String aString);

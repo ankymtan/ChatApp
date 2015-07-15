@@ -36,14 +36,14 @@ public class FragmentLogin extends Fragment implements View.OnClickListener {
 
 
     private static final String BY_ME = "by me";
-    public static final String ADDRESS = "http://192.168.0.6:3000";
+    //public static final String ADDRESS = "http://192.168.0.9:3000";
     //public static final String ADDRESS = "http://10.27.4.174:3000";
-    //public static final String ADDRESS = "http://chat.socket.io";
+    public static final String ADDRESS = "http://192.168.43.202:3000";
     private EditText usernameEt, passwordEt;
     private String mUsername;
     private Socket mSocket;
     private Activity activity;
-    private InputMethodManager keyboadManager;
+    private InputMethodManager keyboardManager;
     ServerRequest serverRequest;
 
     {
@@ -70,7 +70,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //on purpose of hiding input keyboard
-        keyboadManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        keyboardManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //setup color for buttons
         Button loginFacebook = (Button) view.findViewById(R.id.login_facebook);
         Button loginGoogle = (Button) view.findViewById(R.id.login_google);
@@ -86,6 +86,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener {
         // Set up the login form.
         usernameEt = (EditText) view.findViewById(R.id.username);
         passwordEt = (EditText) view.findViewById(R.id.password);
+
         usernameEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -108,7 +109,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.login_button:
                 Log.d(BY_ME, "button pressed");
-                keyboadManager.hideSoftInputFromWindow(usernameEt.getWindowToken(), 0);
+                keyboardManager.hideSoftInputFromWindow(usernameEt.getWindowToken(), 0);
                 attemptLogin();
                 break;
         }

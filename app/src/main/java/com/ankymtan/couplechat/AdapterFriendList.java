@@ -1,6 +1,8 @@
 package com.ankymtan.couplechat;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +40,18 @@ public class AdapterFriendList extends ArrayAdapter<User>{
         // Now we can fill the layout with the right values
         itemFriend = (RelativeLayout) convertView.findViewById(R.id.item_friend_layout);
         TextView friendName = (TextView) convertView.findViewById(R.id.current_friend_name);
+        TextView tvNewMessage = (TextView) convertView.findViewById(R.id.new_message);
         User friend = friendList.get(position);
+        Log.d("By me", friend.getName() + "  " + friend.getUnreadCounter());
         friendName.setText(""+friend.getName());
 
+        //set unread message counter
+        if(friend.getUnreadCounter() == 0) {
+            tvNewMessage.setText("No new message");
+            tvNewMessage.setTextColor(Color.GRAY);
+        }else{
+            tvNewMessage.setText(friend.getUnreadCounter() + " new messages");
+        }
 
         return convertView;
     }

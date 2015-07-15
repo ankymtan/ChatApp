@@ -13,9 +13,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-
-import com.ankymtan.couplechat.WordChecker;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +32,16 @@ public class PluginManager extends Binder{
     static final String CATEGORIES = "aexp.intent.category.WORD_CHECKER_PLUGIN";
     static final String BY_ME = "by me";
     private Context context;
+
+
+
+    private PackageBroadcastReceiver packageBroadcastReceiver;
+    private IntentFilter packageFilter;
+    private ArrayList<HashMap<String, String>> services;
+    private ArrayList<String> categories;
+
+    private OpServiceConnection opServiceConnection;
+    private WordChecker wordCheckerService;
 
     public PluginManager(Context context) {
         this.context = context;
@@ -104,12 +111,6 @@ public class PluginManager extends Binder{
         Log.d(LOG_TAG, "services: " + services);
         Log.d(LOG_TAG, "categories: " + categories);
     }
-
-    private PackageBroadcastReceiver packageBroadcastReceiver;
-    private IntentFilter packageFilter;
-    private ArrayList<HashMap<String, String>> services;
-    private ArrayList<String> categories;
-
     class PackageBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
             services.clear();
@@ -136,6 +137,7 @@ public class PluginManager extends Binder{
         opServiceConnection = new OpServiceConnection();
         Intent i = new Intent(this.ACTION_PICK_PLUGIN);
         i.addCategory(CATEGORIES);
+        //android 5.0+ only accept explicit intent.
         context.bindService(createExplicitFromImplicitIntent(context, i), opServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -156,9 +158,18 @@ public class PluginManager extends Binder{
         }
     }
 
-    private OpServiceConnection opServiceConnection;
-    private WordChecker wordCheckerService;
+    public boolean isPositive(){
+        try {
+            return wordCheckerService.isPositive();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
+
+    //wordCheckerService is a instant of auto-gen class base on aidl file
+    //all service are init within this class
     class OpServiceConnection implements ServiceConnection {
 
         @Override
@@ -197,4 +208,6 @@ public class PluginManager extends Binder{
 
         return explicitIntent;
     }
+
+    //get service here
 }
