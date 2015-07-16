@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ankymtan.couplechat.framework.ProfileManager;
 import com.github.nkzawa.socketio.androidchat.R;
 
 import java.util.ArrayList;
@@ -22,11 +24,13 @@ public class AdapterFriendList extends ArrayAdapter<User>{
     private ArrayList<User> friendList;
     private Context context;
     private RelativeLayout itemFriend;
+    private ProfileManager profileManager;
 
     public AdapterFriendList(ArrayList<User> friendList, Context context){
         super(context, R.layout.item_friend);
         this.friendList = friendList;
         this.context = context;
+        this.profileManager = new ProfileManager(context);
     }
 
     @Override
@@ -43,7 +47,10 @@ public class AdapterFriendList extends ArrayAdapter<User>{
         TextView tvNewMessage = (TextView) convertView.findViewById(R.id.new_message);
         User friend = friendList.get(position);
         Log.d("By me", friend.getName() + "  " + friend.getUnreadCounter());
-        friendName.setText(""+friend.getName());
+        friendName.setText("" + friend.getName());
+
+        ImageView ivProfile =  (ImageView) convertView.findViewById(R.id.iv_friend_profile);
+        profileManager.lazyLoad(ivProfile, friend.getName(), false);
 
         //set unread message counter
         if(friend.getUnreadCounter() == 0) {

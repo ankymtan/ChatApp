@@ -3,6 +3,10 @@ package com.ankymtan.couplechat;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,16 +20,21 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ankymtan.couplechat.framework.ProfileManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -42,7 +51,10 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
     private AdapterFriendList adapter;
     private TextView tvLogout, tvEditAccount;
     private Button btAddFriend;
+    private ImageView ivProfile;
     private Socket mSocket;
+    private ProfileManager profileManager;
+
     {
         try {
             mSocket = IO.socket(FragmentLogin.ADDRESS);
@@ -56,6 +68,7 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
         setHasOptionsMenu(true);
         mSocket.on("check exist", onCheckExist);
         mSocket.connect();
+        profileManager = new ProfileManager(getActivity());
         super.onCreate(savedInstanceState);
     }
 
@@ -76,6 +89,8 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
 
         initFriendList();
 
+
+        ivProfile = (ImageView) view.findViewById(R.id.iv_profile_pic);
         tvLogout = (TextView) view.findViewById(R.id.logout);
         tvEditAccount = (TextView) view.findViewById(R.id.edit_account);
         btAddFriend = (Button) view.findViewById(R.id.bt_add);
@@ -103,6 +118,8 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
 
         TextView profileUsername = (TextView) view.findViewById(R.id.profile_username);
         profileUsername.setText(userLocal.getLoggedInUser().getName());
+
+        profileManager.lazyLoad(ivProfile, userLocal.getLoggedInUser().getName(), false);
     }
 
 

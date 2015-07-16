@@ -20,14 +20,17 @@
         android:maxLength="14"
         android:maxLines="1"
         android:singleLine="true"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="150dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/register_button"
         android:layout_alignStart="@+id/register_button"
         android:layout_alignRight="@+id/register_button"
         android:layout_alignEnd="@+id/register_button"
         android:textColor="@color/black"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:background="@drawable/edit_text"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +43,10 @@
         android:hint="EMAIL"
         android:textColorHint="@color/black"
         android:textColor="@color/black"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:background="@drawable/edit_text"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp" />
 
     <EditText
         android:id="@+id/password_register"
@@ -56,7 +62,10 @@
         android:layout_alignRight="@+id/register_button"
         android:layout_alignEnd="@+id/register_button"
         android:textColor="@color/black"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:background="@drawable/edit_text"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp" />
     <EditText
         android:id="@+id/password_confirm"
         android:layout_width="match_parent"
@@ -71,7 +80,10 @@
         android:layout_alignStart="@+id/password_register"
         android:textColorHint="@color/black"
         android:textColor="@color/black"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:background="@drawable/edit_text"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp" />
 
     <Button
         android:id="@+id/register_button"
@@ -110,11 +122,22 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="OR"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:id="@+id/textView"
         android:layout_below="@+id/register_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Register"
+        android:id="@+id/textView7"
+        android:layout_alignBottom="@+id/username_register"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp"
+        android:textColor="@color/white"/>
 
 
 </RelativeLayout>
