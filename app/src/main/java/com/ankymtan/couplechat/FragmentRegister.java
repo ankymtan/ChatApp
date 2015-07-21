@@ -44,7 +44,7 @@ public class FragmentRegister extends Fragment implements View.OnClickListener{
 
         loginFacebook.getBackground().setColorFilter(Color.rgb(59, 89, 152), PorterDuff.Mode.SRC);
         loginGoogle.getBackground().setColorFilter(Color.rgb(221,75,57), PorterDuff.Mode.SRC);
-        signInButton.getBackground().setColorFilter(Color.rgb(224,123,157), PorterDuff.Mode.SRC);
+        signInButton.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC);
         signInButton.setTextColor(Color.WHITE);
 
         loginFacebook.setTextColor(Color.WHITE);

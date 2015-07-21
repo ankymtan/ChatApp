@@ -3,11 +3,62 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="continue with facebook"
+        android:id="@+id/bt_facebook"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/bt_google"
+        android:textStyle="bold" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@drawable/welcome"
-        android:scaleType="fitXY"/>
+        android:text="continue with google"
+        android:id="@+id/bt_google"
+        android:layout_above="@+id/bt_register"
+        android:layout_alignLeft="@+id/bt_facebook"
+        android:layout_alignStart="@+id/bt_facebook"
+        android:layout_alignRight="@+id/bt_facebook"
+        android:layout_alignEnd="@+id/bt_facebook"
+        android:textStyle="bold" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sign up using email"
+        android:id="@+id/bt_register"
+        android:layout_above="@+id/texview8"
+        android:layout_alignRight="@+id/bt_google"
+        android:layout_alignEnd="@+id/bt_google"
+        android:layout_alignLeft="@+id/bt_google"
+        android:layout_alignStart="@+id/bt_google"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Have an account? "
+        android:id="@+id/texview8"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="100dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="LOGIN"
+        android:id="@+id/tv_login"
+        android:layout_alignTop="@+id/texview8"
+        android:layout_toRightOf="@+id/texview8"
+        android:layout_toEndOf="@+id/texview8"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
 
 </RelativeLayout>

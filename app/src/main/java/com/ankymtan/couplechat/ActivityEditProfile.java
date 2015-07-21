@@ -96,4 +96,6 @@ public class ActivityEditProfile  extends ActionBarActivity{
         return cursor.getString(column_index);
     }
 
+
+
 }

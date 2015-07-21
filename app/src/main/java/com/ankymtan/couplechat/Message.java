@@ -2,9 +2,12 @@ package com.ankymtan.couplechat;
 
 public class Message {
 
-    public static final int TYPE_MESSAGE = 0;
-    public static final int TYPE_LOG = 1;
-    public static final int TYPE_ACTION = 2;
+    public static final int TYPE_LOG = 0;
+    public static final int TYPE_ACTION = 1;
+
+    public static final int TYPE_MESSAGE_RIGHT = 2;
+    public static final int TYPE_MESSAGE_BOTTOM = 3;
+    public static final int TYPE_MESSAGE_BOTTOM_RIGHT = 4;
 
     private int type;
     private String message;

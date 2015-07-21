@@ -5,7 +5,8 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:theme="@style/Base.Theme.AppCompat.Light"
-    tools:context=".FragmentLogin">
+    tools:context=".FragmentLogin"
+    android:background="@color/black_transparent">
 
     <EditText
         android:id="@+id/username_register"
@@ -20,7 +21,7 @@
         android:maxLength="14"
         android:maxLines="1"
         android:singleLine="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/register_button"
         android:layout_alignStart="@+id/register_button"
@@ -29,7 +30,6 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@null"
         android:background="@drawable/edit_text"
-        android:layout_marginBottom="10dp"
         android:padding="7dp" />
     <EditText
         android:layout_width="wrap_content"
@@ -45,7 +45,6 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@null"
         android:background="@drawable/edit_text"
-        android:layout_marginBottom="10dp"
         android:padding="7dp" />
 
     <EditText
@@ -64,7 +63,6 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@null"
         android:background="@drawable/edit_text"
-        android:layout_marginBottom="10dp"
         android:padding="7dp" />
     <EditText
         android:id="@+id/password_confirm"
@@ -82,8 +80,8 @@
         android:textColor="@color/black"
         android:textCursorDrawable="@null"
         android:background="@drawable/edit_text"
-        android:layout_marginBottom="10dp"
-        android:padding="7dp" />
+        android:padding="7dp"
+        android:layout_marginBottom="25dp" />
 
     <Button
         android:id="@+id/register_button"
@@ -93,7 +91,8 @@
         android:text="REGISTER"
         android:layout_below="@+id/password_confirm"
         android:layout_centerHorizontal="true"
-        android:padding="15dp" />
+        android:padding="15dp"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/login_facebook"
@@ -103,7 +102,8 @@
         android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/register_button"
         android:layout_alignStart="@+id/register_button"
-        android:padding="15dp" />
+        android:padding="15dp"
+        android:textStyle="bold"/>
 
     <Button
         android:id="@+id/login_google"
@@ -115,14 +115,15 @@
         android:layout_alignEnd="@+id/register_button"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView"
-        android:padding="15dp" />
+        android:padding="15dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="OR"
-        android:textColor="@color/white"
+        android:textColor="@color/green"
         android:id="@+id/textView"
         android:layout_below="@+id/register_button"
         android:layout_centerHorizontal="true"
@@ -137,7 +138,7 @@
         android:layout_alignBottom="@+id/username_register"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="47dp"
-        android:textColor="@color/white"/>
+        android:textColor="@color/green"/>
 
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/iv_friend_profile"
+        android:id="@+id/iv_current_friend_profile"
         android:src="@drawable/avatar_shape"
         android:background="@drawable/profile_empty"
         android:layout_alignParentTop="true"
@@ -23,9 +23,9 @@
         android:id="@+id/current_friend_name"
         android:textColor="@color/black"
         android:gravity="center"
-        android:layout_alignTop="@+id/iv_friend_profile"
-        android:layout_toRightOf="@+id/iv_friend_profile"
-        android:layout_toEndOf="@+id/iv_friend_profile"
+        android:layout_alignTop="@+id/iv_current_friend_profile"
+        android:layout_toRightOf="@+id/iv_current_friend_profile"
+        android:layout_toEndOf="@+id/iv_current_friend_profile"
         android:layout_marginTop="7dp"
         android:layout_marginLeft="15dp" />
 

@@ -49,7 +49,7 @@ public class AdapterFriendList extends ArrayAdapter<User>{
         Log.d("By me", friend.getName() + "  " + friend.getUnreadCounter());
         friendName.setText("" + friend.getName());
 
-        ImageView ivProfile =  (ImageView) convertView.findViewById(R.id.iv_friend_profile);
+        ImageView ivProfile =  (ImageView) convertView.findViewById(R.id.iv_current_friend_profile);
         profileManager.lazyLoad(ivProfile, friend.getName(), false);
 
         //set unread message counter

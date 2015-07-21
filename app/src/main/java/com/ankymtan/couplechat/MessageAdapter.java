@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.nkzawa.socketio.androidchat.R;
@@ -18,28 +19,50 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
+    private final static String LOG_TAG = "by me messageAdapter ";
+
     private List<Message> mMessages;
     private Themer themer;
     private UserLocal userLocal;
+    private String loggedInUserName;
+    private Drawable left, right;
+    private TextView tvTest;
 
-    public MessageAdapter(Context context, List<Message> messages) {
+
+    public MessageAdapter(Context context, List<Message> messages, TextView tvTest) {
         mMessages = messages;
         themer = new Themer(context);
         userLocal = new UserLocal(context);
+
+        loggedInUserName = userLocal.getLoggedInUser().getName();
+        left = themer.getDrawable("left");
+        right = themer.getDrawable("right");
+
+        this.tvTest = tvTest;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout = -1;
         switch (viewType) {
-            case Message.TYPE_MESSAGE:
-                layout = R.layout.item_message;
+            case Message.TYPE_MESSAGE_RIGHT:
+                layout = R.layout.item_message_time_right;
+                break;
+            case Message.TYPE_MESSAGE_BOTTOM:
+                layout = R.layout.item_message_time_bottom;
+                break;
+            case Message.TYPE_MESSAGE_BOTTOM_RIGHT:
+                layout = R.layout.item_message_time_bottom_right;
                 break;
             case Message.TYPE_LOG:
                 layout = R.layout.item_log;
                 break;
             case Message.TYPE_ACTION:
                 layout = R.layout.item_action;
+                break;
+            default:
+                layout = R.layout.item_log;
                 break;
         }
         View v = LayoutInflater
@@ -56,9 +79,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         viewHolder.setTime(message.getGMT());
 
         //set right/left side
-        if (message.getType() == message.TYPE_MESSAGE && message.getUsernameFrom().equals(userLocal.getLoggedInUser().getName())) {
+        if (message.getType() > message.TYPE_ACTION && message.getUsernameFrom().equals(loggedInUserName)) {
             viewHolder.setRight();
-        }else if(message.getType() == message.TYPE_MESSAGE && message.getUsernameFrom().equals("system advice")) {
+        }else if(message.getType() > message.TYPE_ACTION && message.getUsernameFrom().equals("system advice")) {
             viewHolder.setAdvice();
         }else{
             viewHolder.setLeft();
@@ -84,22 +107,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         private TextView mUsernameView;
         private TextView mMessageView;
         private TextView mTimeView;
-        LinearLayout messageLayout;
-        LinearLayout messageBackground;
+        RelativeLayout messageLayout;
+        RelativeLayout messageBackground;
 
-        private Drawable left, right;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            left = themer.getDrawable("left");
-            right = themer.getDrawable("right");
-
             mUsernameView = (TextView) itemView.findViewById(R.id.username);
             mMessageView = (TextView) itemView.findViewById(R.id.message);
             mTimeView = (TextView) itemView.findViewById(R.id.time);
-            messageLayout = (LinearLayout) itemView.findViewById(R.id.message_row);
-            messageBackground = (LinearLayout) itemView.findViewById(R.id.message_background);
+            messageLayout = (RelativeLayout) itemView.findViewById(R.id.message_row);
+            messageBackground = (RelativeLayout) itemView.findViewById(R.id.message_background);
         }
 
         public void setUsername(String username) {
@@ -110,7 +130,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public void setMessage(String message) {
             if (null == mMessageView) return;
             mMessageView.setText(message);
-            mMessageView.setGravity(Gravity.RIGHT);
+            mMessageView.setGravity(Gravity.LEFT);
         }
 
         public void setTime(String GMT){
@@ -121,13 +141,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public void setLeft() {
             if (null == messageLayout) return;
             messageLayout.setGravity(Gravity.LEFT);
-            messageBackground.setBackground(left);
+            Drawable cloneLeft = left.getConstantState().newDrawable();
+            messageBackground.setBackground(cloneLeft);
         }
 
         public void setRight() {
             if (null == messageLayout) return;
             messageLayout.setGravity(Gravity.RIGHT);
-            messageBackground.setBackground(right);
+            Drawable cloneRight = right.getConstantState().newDrawable();
+            messageBackground.setBackground(cloneRight);
         }
 
         public void setAdvice() {

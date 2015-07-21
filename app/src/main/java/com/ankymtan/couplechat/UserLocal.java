@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ankymtan.couplechat.framework.MyDatabaseHelper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,13 +21,11 @@ public class UserLocal {
     private static final String SP_NAME_FRIEND_LIST = "friendList";
     private static final String SP_MESSAGE_LIST = "messageList";
     private SharedPreferences userLocalDetails;
-    private SharedPreferences friendList;
-    private SharedPreferences messageList;
+    private MyDatabaseHelper myDatabaseHelper;
 
     public UserLocal(Context context) {
         userLocalDetails = context.getSharedPreferences(SP_NAME, 0);
-        friendList = context.getSharedPreferences(SP_NAME_FRIEND_LIST, 0);
-        messageList = context.getSharedPreferences(SP_MESSAGE_LIST, 0);
+        myDatabaseHelper = new MyDatabaseHelper(context);
     }
 
     public void storeUser(User user) {
@@ -74,95 +74,28 @@ public class UserLocal {
         editor.clear();
         editor.commit();
 
-        SharedPreferences.Editor editorFriendList = friendList.edit();
-        editorFriendList.clear();
-        editorFriendList.commit();
-
-        SharedPreferences.Editor editorMessageList = messageList.edit();
-        editorMessageList.clear();
-        editorMessageList.commit();
-
+        myDatabaseHelper.clear();
     }
 
     //deal with add/ remove/ update friend.
     public void addFriend(User user) {
-        HashSet<String> friends;
-        friends = (HashSet<String>) friendList.getStringSet("friendNames", new HashSet());
-
-        String encodedFriendInfo = user.getName() + "#0";
-        friends.add(encodedFriendInfo);
-
-        SharedPreferences.Editor editor = friendList.edit();
-
-        editor.clear();
-        editor.putStringSet("friendNames", friends);
-        editor.commit();
+        myDatabaseHelper.addFriend(user);
     }
 
     public void addNewMessageFrom(String username) {
-        HashSet<String> friends;
-        friends = (HashSet<String>) friendList.getStringSet("friendNames", new HashSet());
-
-        for (String friend : friends) {
-            if (getFirstItem(friend).equals(username)) {
-                int counter = Integer.valueOf(getSecondItem(friend));
-                friends.remove(friend);
-                friends.add(username + "#" + (counter + 1));
-                break;
-            }
-        }
-
-        SharedPreferences.Editor editor = friendList.edit();
-        editor.clear();
-        editor.putStringSet("friendNames", friends);
-        editor.commit();
-
+        myDatabaseHelper.addNewMessageFrom(username);
     }
 
     public void resetNewMessageCounterFrom(String username){
-        HashSet<String> friends;
-        friends = (HashSet<String>) friendList.getStringSet("friendNames", new HashSet());
-
-        for (String friend : friends) {
-            if (getFirstItem(friend).equals(username)) {
-                friends.remove(friend);
-                friends.add(username + "#0");
-                break;
-            }
-        }
-
-        SharedPreferences.Editor editor = friendList.edit();
-        editor.clear();
-        editor.putStringSet("friendNames", friends);
-        editor.commit();
+        myDatabaseHelper.resetNewMessageCounterFrom(username);
     }
 
     public ArrayList<User> getFriendList() {
-        HashSet<String> friendInfos = (HashSet<String>) friendList.getStringSet("friendNames", new HashSet());
-        ArrayList<User> result = new ArrayList<>();
-
-        for (String friendInfo : friendInfos) {
-            result.add(new User(getFirstItem(friendInfo), Integer.valueOf(getLastItem(friendInfo))));
-        }
-
-        Collections.sort(result, new Comparator<User>() {
-            @Override
-            public int compare(User lhs, User rhs) {
-                return lhs.getName().compareTo(rhs.getName());
-            }
-        });
-        return result;
+        return myDatabaseHelper.getFriendList();
     }
 
     public ArrayList<String> getFriendNameList() {
-        HashSet<String> friendInfos = (HashSet<String>) friendList.getStringSet("friendNames", new HashSet());
-        ArrayList<String> result = new ArrayList<>();
-
-        for (String friendInfo : friendInfos) {
-            result.add(getFirstItem(friendInfo));
-        }
-
-        return result;
+        return myDatabaseHelper.getFriendNameList();
     }
 
     //
@@ -187,52 +120,11 @@ public class UserLocal {
     }
 
     public void addMessage(Message message) {
-
-        //init
-        HashSet<String> messages = new HashSet<>();
-        String encodedMessage;
-
-        messages = (HashSet<String>) messageList.getStringSet("message", new HashSet());
-
-        //encode input message
-        encodedMessage = message.getGMT() + "#" + message.getUsernameFrom() + "#" + message.getUsernameTo() + "#" + message.getMessage();
-        messages.add(encodedMessage);
-
-        //put back
-        SharedPreferences.Editor editor = messageList.edit();
-        editor.clear();
-        editor.putStringSet("message", messages);
-        editor.commit();
+        myDatabaseHelper.addMessage(message);
     }
 
     public ArrayList<Message> getMessageListWith(String currentFriendName) {
-
-        ArrayList<Message> result = new ArrayList<>();
-        ArrayList<String> encodedMessages = new ArrayList<>();
-        HashSet<String> messages = (HashSet<String>) messageList.getStringSet("message", new HashSet());
-
-        for (String encodedMessage : messages) {
-            encodedMessages.add(encodedMessage);
-        }
-
-        Collections.sort(encodedMessages, String.CASE_INSENSITIVE_ORDER);
-
-        for (String encodedMessage : encodedMessages) {
-            if (getSecondItem(encodedMessage).equals(currentFriendName)) {
-                Message message = new Message.Builder(Message.TYPE_MESSAGE).usernameFrom(currentFriendName)
-                        .usernameTo(getLoggedInUser().getName()).GMT(getFirstItem(encodedMessage)).message(getLastItem(encodedMessage))
-                        .build();
-                result.add(message);
-                Log.d(BY_ME, "check hashset order  " + encodedMessage);
-            } else if (getThirdItem(encodedMessage).equals(currentFriendName)) {
-                Message message = new Message.Builder(Message.TYPE_MESSAGE).usernameFrom(getLoggedInUser().getName())
-                        .usernameTo(currentFriendName).GMT(getFirstItem(encodedMessage)).message(getLastItem(encodedMessage))
-                        .build();
-                result.add(message);
-                Log.d(BY_ME, "check hashset order  " + encodedMessage);
-            }
-        }
-        return result;
+        return  myDatabaseHelper.getMessageListWith(currentFriendName);
     }
 
     ;

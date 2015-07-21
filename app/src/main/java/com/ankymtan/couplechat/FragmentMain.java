@@ -28,9 +28,11 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ankymtan.couplechat.framework.ProfileManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.github.nkzawa.socketio.client.IO;
@@ -53,9 +55,11 @@ import java.util.TimeZone;
 public class FragmentMain extends Fragment {
 
     private static final int TYPING_TIMER_LENGTH = 600;
+    private static final int WAITING_NEW_MESSAGE_LENGTH = 500;
     private static final int RETHINKING_TIMER_LENGTH = 5000;
-    private static final String BY_ME = "by me";
-    public int messageCounter = 0, numberOfHeart = 0, x, y;
+    private static final String LOG_TAG = "by me ";
+
+    public int messageCounter = 0, numberOfHeart = 0, messageType, x, y;
     private RecyclerView mMessagesView;
     public EditText mInputMessageView;
     private List<Message> mMessages = new ArrayList<Message>();
@@ -63,14 +67,17 @@ public class FragmentMain extends Fragment {
     private boolean mTyping = false;
     private Handler mTypingHandler = new Handler();
     private Handler mNegativeMessageHandler = new Handler();
-    private String mUsername;
+    private Handler mNewMessageNotiHandler = new Handler();
+    private String loggedInUsername, currentFriendName;
     private Socket mSocket;
     private PluginManager pluginManager;
     private UserLocal userLocal;
     private android.support.v7.app.ActionBar actionBar;
     private JSONObject jsonNewMessage;
     private SimpleDateFormat dateFormatGMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-    private TextView tvFriendStatus;
+    private TextView tvFriendStatus, tvTest, tvTestAfterAdding;
+    private ImageView currentFriendProfile;
+    private ProfileManager profileManager;
 
     {
         try {
@@ -83,12 +90,12 @@ public class FragmentMain extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        profileManager = new ProfileManager(activity);
         //prevent keyboard from being shown first time
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         pluginManager = new PluginManager(activity);
-        mAdapter = new MessageAdapter(activity, mMessages);
         pluginManager.onStart();
-        Log.d(BY_ME, "onAttach" + mUsername);
+        Log.d(LOG_TAG, "onAttach" + loggedInUsername);
         //get screen size
         WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -98,7 +105,8 @@ public class FragmentMain extends Fragment {
         y = size.y;
         //
         userLocal = new UserLocal(activity);
-        mUsername = userLocal.getLoggedInUser().getName();
+        loggedInUsername = userLocal.getLoggedInUser().getName();
+        currentFriendName = userLocal.getCurrentFriend();
     }
 
     @Override
@@ -117,13 +125,13 @@ public class FragmentMain extends Fragment {
         mSocket.on("stop typing", onStopTyping);
         mSocket.connect();
 
-        Log.d(BY_ME, "onCreate" + mUsername);
+        Log.d(LOG_TAG, "onCreate" + loggedInUsername);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(BY_ME, "onCreateView" + mUsername);
+        Log.d(LOG_TAG, "onCreateView" + loggedInUsername);
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -142,28 +150,22 @@ public class FragmentMain extends Fragment {
         mSocket.off("stop typing", onStopTyping);
 
         pluginManager.onStop();
-        Log.d(BY_ME, "onDestroy" + mUsername);
+        Log.d(LOG_TAG, "onDestroy" + loggedInUsername);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tvTest = (TextView) view.findViewById(R.id.tv_test);
+        tvTestAfterAdding = (TextView) view.findViewById(R.id.tv_test_after_adding);
+
+        mAdapter = new MessageAdapter(getActivity(), mMessages, tvTest);
         mMessagesView = (RecyclerView) view.findViewById(R.id.messages);
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMessagesView.setAdapter(mAdapter);
 
         mInputMessageView = (EditText) view.findViewById(R.id.message_input);
-        mInputMessageView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int id, KeyEvent event) {
-                if (id == R.id.send || id == EditorInfo.IME_NULL) {
-                    attemptSend();
-                    return true;
-                }
-                return false;
-            }
-        });
         mInputMessageView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -171,13 +173,16 @@ public class FragmentMain extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (null == mUsername) return;
+                if (null == loggedInUsername) return;
                 if (!mSocket.connected()) return;
 
                 if (!mTyping) {
                     mTyping = true;
                     mSocket.emit("typing");
                 }
+
+                tvTest.setText(mInputMessageView.getText());
+                tvTestAfterAdding.setText(mInputMessageView.getText() + "        i");
 
                 mTypingHandler.removeCallbacks(onTypingTimeout);
                 mTypingHandler.postDelayed(onTypingTimeout, TYPING_TIMER_LENGTH);
@@ -191,10 +196,7 @@ public class FragmentMain extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (((ActivityMain) getActivity()).getBackground().onAnimation()) {
-                    Log.d(BY_ME, "block cuz drawing");
-                    mInputMessageView.setInputType(EditorInfo.TYPE_NULL);
-                } else {
-                    mInputMessageView.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                    return true;
                 }
                 return false;
             }
@@ -204,7 +206,7 @@ public class FragmentMain extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(BY_ME, "button clicked " + mUsername);
+                Log.d(LOG_TAG, "button clicked " + loggedInUsername);
                 attemptSend();
             }
         });
@@ -218,34 +220,41 @@ public class FragmentMain extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        currentFriendName = userLocal.getCurrentFriend();
+        //if have choose current friend yet then do nothing
+        if(currentFriendName == null) return;
+
         actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.item_current_friend);
         TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
+        currentFriendProfile = (ImageView) actionBar.getCustomView().findViewById(R.id.iv_current_friend_profile);
+
         textView.setText(userLocal.getCurrentFriend());
         tvFriendStatus = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_status);
         getOnlineStatus();
         updateMessageList();
+
+        profileManager.lazyLoad(currentFriendProfile, userLocal.getCurrentFriend(), false);
     }
 
     private void addLog(String message) {
-        Log.d(BY_ME, "b4addLog" + mUsername);
+        Log.d(LOG_TAG, "b4addLog" + loggedInUsername);
         mMessages.add(new Message.Builder(Message.TYPE_LOG)
                 .message(message).build());
         mAdapter.notifyItemInserted(mMessages.size() - 1);
         scrollToBottom();
-        Log.d(BY_ME, "addLog" + mUsername);
+        Log.d(LOG_TAG, "addLog" + loggedInUsername);
     }
 
 
-    private void addMessage(String usernameFrom, String usernameTo, String message, String GMT) {
+    private void addMessage(Message message) {
 
-        mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
-                .usernameFrom(usernameFrom).usernameTo(usernameTo).message(message).GMT(GMT).build());
+        mMessages.add(message);
         mAdapter.notifyItemInserted(mMessages.size() - 1);
         scrollToBottom();
         messageCounter++;
-        Log.d(BY_ME, "addMess" + mUsername);
+        Log.d(LOG_TAG, "addMess" + loggedInUsername);
     }
 
     //delete most recent message send by LoggedIn user or advice by system
@@ -253,7 +262,7 @@ public class FragmentMain extends Fragment {
         for (int i = 0; i < 15; i++) {
             Message checkMessage = mMessages.get(mMessages.size() - 1 - i);
             if (checkMessage.getUsernameFrom().equals("system advice")
-                    || checkMessage.getUsernameFrom().equals(userLocal.getLoggedInUser().getName())) {
+                    || checkMessage.getUsernameFrom().equals(loggedInUsername)) {
                 mMessages.remove(mMessages.size() - 1 - i);
                 mAdapter.notifyDataSetChanged();
                 return;
@@ -267,7 +276,7 @@ public class FragmentMain extends Fragment {
                 .usernameFrom(username).build());
         mAdapter.notifyItemInserted(mMessages.size() - 1);
         scrollToBottom();
-        Log.d(BY_ME, "addTyping" + mUsername);
+        Log.d(LOG_TAG, "addTyping" + loggedInUsername);
     }
 
     private void removeTyping(String username) {
@@ -279,16 +288,16 @@ public class FragmentMain extends Fragment {
                 mAdapter.notifyItemRemoved(i);
             }
         }
-        Log.d(BY_ME, "removeTyping" + mUsername);
+        Log.d(LOG_TAG, "removeTyping" + loggedInUsername);
     }
 
     private void attemptSend() {
-        if (mUsername == null) {
-            Log.d(BY_ME, "attem to send 1" + mUsername);
+        if (currentFriendName == null) {
+            Log.d(LOG_TAG, currentFriendName+" = null");
             return;
         }
         if (!mSocket.connected()) {
-            Log.d(BY_ME, "mSocket never connected");
+            Log.d(LOG_TAG, "mSocket never connected");
             return;
         }
 
@@ -300,26 +309,30 @@ public class FragmentMain extends Fragment {
             return;
         }
 
-        mInputMessageView.setText("");
-        addMessage(userLocal.getLoggedInUser().getName(), userLocal.getCurrentFriend(), message, getGMT());
+        messageType = getMessageType();
+
+        addMessage(new Message.Builder(messageType).message(message)
+                .usernameFrom(loggedInUsername).usernameTo(currentFriendName).GMT(getGMT()).build());
         String adviceMessage = pluginManager.check(message);
 
         if (adviceMessage != null) {
-            addMessage("system advice", userLocal.getCurrentFriend(), adviceMessage, getGMT());
+            addMessage(new Message.Builder(Message.TYPE_MESSAGE_BOTTOM).message(adviceMessage)
+                    .usernameFrom("system advice").usernameTo(currentFriendName).GMT(getGMT()).build());
         }
 
         jsonNewMessage = new JSONObject();
         try {
             jsonNewMessage.put("message", message);
-            jsonNewMessage.put("username", userLocal.getLoggedInUser().getName());
-            jsonNewMessage.put("currentFriend", userLocal.getCurrentFriend());
+            jsonNewMessage.put("username", loggedInUsername);
+            jsonNewMessage.put("currentFriend", currentFriendName);
             jsonNewMessage.put("GMT", getGMT().toString());
-            Log.d(BY_ME, userLocal.getLoggedInUser().getName());
+            jsonNewMessage.put("type", messageType);
+            Log.d(LOG_TAG, loggedInUsername);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d(BY_ME, "is Message positive: " + pluginManager.isPositive());
+        Log.d(LOG_TAG, "is Message positive: " + pluginManager.isPositive());
         //when recognized a negative mess
         if (!pluginManager.isPositive()) {
             mNegativeMessageHandler.postDelayed(onRethinkingTimeout, RETHINKING_TIMER_LENGTH);
@@ -354,7 +367,7 @@ public class FragmentMain extends Fragment {
 
                     actionBar.setCustomView(R.layout.item_current_friend);
                     TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
-                    textView.setText(userLocal.getCurrentFriend());
+                    textView.setText(currentFriendName);
 
                     Toast.makeText(getActivity(), "Message cancelled", Toast.LENGTH_SHORT).show();
                 }
@@ -365,8 +378,9 @@ public class FragmentMain extends Fragment {
         // perform the sending message attempt.
         mSocket.emit("new message", jsonNewMessage.toString());
         //save message to local storage
-        userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE).usernameFrom(userLocal.getLoggedInUser().getName())
-                .usernameTo(userLocal.getCurrentFriend()).GMT(getGMT()).message(message).build());
+        userLocal.addMessage(new Message.Builder(messageType).usernameFrom(loggedInUsername)
+                .usernameTo(currentFriendName).GMT(getGMT()).message(message).build());
+        mInputMessageView.setText("");
     }
 
 
@@ -384,14 +398,14 @@ public class FragmentMain extends Fragment {
                             R.string.error_connect, Toast.LENGTH_LONG).show();
                 }
             });
-            Log.d(BY_ME, "onConnect ERR" + mUsername);
+            Log.d(LOG_TAG, "onConnect ERR" + loggedInUsername);
         }
     };
 
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            Log.d(BY_ME, "b4 on new Mess " + mUsername);
+            Log.d(LOG_TAG, "b4 on new Mess " + loggedInUsername);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -399,10 +413,12 @@ public class FragmentMain extends Fragment {
                     String username;
                     String message;
                     String time;
+                    int type;
                     try {
                         username = data.getString("username");
                         message = data.getString("message");
                         time = data.getString("GMT");
+                        type = data.getInt("type");
                     } catch (JSONException e) {
                         return;
                     }
@@ -410,23 +426,21 @@ public class FragmentMain extends Fragment {
                     removeTyping(username);
 
                     //save to local storage
-                    userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE).usernameFrom(username)
-                            .usernameTo(userLocal.getLoggedInUser().getName()).GMT(time).message(message).build());
+                    userLocal.addMessage(new Message.Builder(type).usernameFrom(username)
+                            .usernameTo(loggedInUsername).GMT(time).message(message).build());
 
                     //if sender is current friend then show message
-                    if (username.equals(userLocal.getCurrentFriend())) {
-                        addMessage(username, mUsername, message, time);
+                    if (username.equals(currentFriendName)) {
+                        addMessage(new Message.Builder(type).message(message)
+                                .usernameFrom(username).usernameTo(loggedInUsername).GMT(time).build());
                     } else {
-                        //if username is new in friendlsit then add to friend list
-                        if(!userLocal.getFriendNameList().contains(username)){
-                            userLocal.addFriend(new User(username));
-                        }
                         userLocal.addNewMessageFrom(username);
-                        Toast.makeText(getActivity(), "new message from " + username, Toast.LENGTH_LONG).show();
+                        mNewMessageNotiHandler.removeCallbacks(onWaitingNewMessageTimeout);
+                        mNewMessageNotiHandler.postDelayed(onWaitingNewMessageTimeout, WAITING_NEW_MESSAGE_LENGTH);
                     }
                 }
             });
-            Log.d(BY_ME, "on new Mess " + mUsername);
+            Log.d(LOG_TAG, "on new Mess " + loggedInUsername);
         }
     };
 
@@ -444,7 +458,7 @@ public class FragmentMain extends Fragment {
                         return;
                     }
                     addLog(getResources().getString(R.string.message_user_joined, username));
-                    Log.d(BY_ME, "onuserjoin" + mUsername);
+                    Log.d(LOG_TAG, "onuserjoin" + loggedInUsername);
                 }
             });
         }
@@ -522,7 +536,7 @@ public class FragmentMain extends Fragment {
                         } else {
                             tvFriendStatus.setText("Offline");
                         }
-                        Log.d(BY_ME, "online status " + json.getBoolean("onlineStatus"));
+                        Log.d(LOG_TAG, "online status " + json.getBoolean("onlineStatus"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -549,7 +563,7 @@ public class FragmentMain extends Fragment {
             //TODO change back actionbar
             actionBar.setCustomView(R.layout.item_current_friend);
             TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
-            textView.setText(userLocal.getCurrentFriend());
+            textView.setText(currentFriendName);
             //add message to local storage
             String messageContent = "";
             try {
@@ -558,9 +572,16 @@ public class FragmentMain extends Fragment {
                 e.printStackTrace();
             }
 
-            Message message = new Message.Builder(Message.TYPE_MESSAGE).usernameFrom(userLocal.getLoggedInUser().getName())
-                    .usernameTo(userLocal.getCurrentFriend()).GMT(getGMT()).message(messageContent).build();
+            Message message = new Message.Builder(Message.TYPE_MESSAGE_BOTTOM).usernameFrom(loggedInUsername)
+                    .usernameTo(currentFriendName).GMT(getGMT()).message(messageContent).build();
             userLocal.addMessage(message);
+        }
+    };
+
+    public Runnable onWaitingNewMessageTimeout = new Runnable() {
+        @Override
+        public void run() {
+            Toast.makeText(getActivity(), "new message", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -579,19 +600,18 @@ public class FragmentMain extends Fragment {
             e.printStackTrace();
         }
         mSocket.emit("username", json.toString());
-        Log.d(BY_ME, "emit username");
+        Log.d(LOG_TAG, "emit username");
     }
 
     private String getGMT() {
-        Log.d(BY_ME, dateFormatGMT.format(new Date()));
+        Log.d(LOG_TAG, dateFormatGMT.format(new Date()));
         return dateFormatGMT.format(new Date());
     }
 
     private void getOnlineStatus() {
-        if (userLocal.getCurrentFriend() == null) return;
         JSONObject json = new JSONObject();
         try {
-            json.put("username", userLocal.getCurrentFriend());
+            json.put("username", currentFriendName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -599,14 +619,33 @@ public class FragmentMain extends Fragment {
     }
 
     private void updateMessageList() {
-        ArrayList<Message> savedMessageList = userLocal.getMessageListWith(userLocal.getCurrentFriend());
+        ArrayList<Message> savedMessageList = userLocal.getMessageListWith(currentFriendName);
         mMessages.clear();
         for(Message savedMessage: savedMessageList){
             mMessages.add(savedMessage);
         }
         mAdapter.notifyDataSetChanged();
 
-        Log.d(BY_ME, "update message list");
+        Log.d(LOG_TAG, "update message list");
+    }
+
+    public int getMessageType(){
+        Log.d(LOG_TAG, "tvTest = "+tvTest.getText()+" has "+tvTest.getLineCount());
+        Log.d(LOG_TAG, "tvTestAfterAdding = "+tvTestAfterAdding.getText()+" has "+tvTestAfterAdding.getLineCount());
+
+        if(tvTest.getLineCount() == 0 || tvTestAfterAdding.getLineCount() == 0 ){
+            return Message.TYPE_MESSAGE_BOTTOM;
+        }
+
+        if(tvTest.getLineCount() == 1){
+            return Message.TYPE_MESSAGE_RIGHT;
+        }
+
+        if(tvTest.getLineCount() == tvTestAfterAdding.getLineCount()){
+            return Message.TYPE_MESSAGE_BOTTOM_RIGHT;
+        }
+
+        return Message.TYPE_MESSAGE_BOTTOM;
     }
 }
 

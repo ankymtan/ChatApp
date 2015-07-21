@@ -1,11 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/message_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingTop="@dimen/spacing">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/message_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -16,20 +16,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/spacing"
-            android:singleLine="true"
-            android:textColor="@color/white" />
-
+            android:singleLine="false"
+            android:textColor="@color/white"
+            android:maxWidth="250dp"
+            android:text="fasfasdf sad f asd f asdfasdfa sdf asdfasdf as df as df as df asd f as df"
+            android:minWidth="30dp" />
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/message"
-            android:layout_toEndOf="@+id/message"
-            android:layout_toRightOf="@+id/message"
             android:text="time"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="10dp"
-            android:layout_marginTop="2dp" />
-    </LinearLayout>
+            android:singleLine="true"
+            android:layout_below="@+id/message"
+            android:layout_alignRight="@+id/message"
+            android:layout_alignEnd="@+id/message" />
 
-</LinearLayout>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -10,9 +10,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+import android.view.animation.OvershootInterpolator;
 
+import com.ankymtan.couplechat.framework.CustomScroller;
 import com.github.nkzawa.socketio.androidchat.R;
 
+import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,6 +65,17 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         mViewPager.setAdapter(mTabAdapter);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(1);
+
+        try {
+            Field mScroller = ViewPager.class.getDeclaredField("mScroller");
+
+            mScroller.setAccessible(true);
+            CustomScroller scroller = new CustomScroller(this, new OvershootInterpolator(1));
+            scroller.setDuration(700);
+            mScroller.set(mViewPager, scroller);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //
         //work for background
         final Runnable backgroundUpdate = new Runnable() {

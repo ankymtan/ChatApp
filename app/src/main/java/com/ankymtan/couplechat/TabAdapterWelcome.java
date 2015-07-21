@@ -21,9 +21,9 @@ public class TabAdapterWelcome extends FragmentPagerAdapter{
             case 0:
                 return new FragmentWelcome();
             case 1:
-                return new FragmentLogin();
-            case 2:
                 return new FragmentRegister();
+            case 2:
+                return new FragmentLogin();
         }
         return null;
     }

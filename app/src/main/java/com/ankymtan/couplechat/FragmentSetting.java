@@ -3,29 +3,25 @@ package com.ankymtan.couplechat;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.ankymtan.couplechat.framework.ProfileManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
@@ -33,11 +29,8 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by An on 10/6/2015.
@@ -50,10 +43,11 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
     private ListView listView;
     private AdapterFriendList adapter;
     private TextView tvLogout, tvEditAccount;
-    private Button btAddFriend;
     private ImageView ivProfile;
     private Socket mSocket;
     private ProfileManager profileManager;
+    private ActionBar actionBar;
+    private MenuItem add, setting;
 
     {
         try {
@@ -93,16 +87,6 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
         ivProfile = (ImageView) view.findViewById(R.id.iv_profile_pic);
         tvLogout = (TextView) view.findViewById(R.id.logout);
         tvEditAccount = (TextView) view.findViewById(R.id.edit_account);
-        btAddFriend = (Button) view.findViewById(R.id.bt_add);
-        final EditText etAddFriend = (EditText) view.findViewById(R.id.add_friend);
-
-        btAddFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFriend(new User(etAddFriend.getText().toString()));
-            }
-        });
-
 
         tvLogout.setOnClickListener(this);
         tvEditAccount.setOnClickListener(this);
@@ -141,7 +125,15 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_setting, menu);
+
+        add = menu.findItem(R.id.add);
+        setting = menu.findItem(R.id.setting);
+
+        actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+
         updateFriendList();
+        profileManager.lazyLoad(ivProfile, userLocal.getLoggedInUser().getName(), false);
     }
 
     @Override
@@ -177,6 +169,30 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
                     }
                 });
                 alertAddFriend.show();
+                break;
+            case R.id.add:
+                add.setVisible(false);
+                setting.setVisible(false);
+                actionBar.setCustomView(R.layout.item_add_friend);
+
+                ImageView btBack = (ImageView) actionBar.getCustomView().findViewById(R.id.bt_back);
+                ImageView btAddFriend = (ImageView) actionBar.getCustomView().findViewById(R.id.bt_add_friend);
+                final EditText etFriendToAdd = (EditText) actionBar.getCustomView().findViewById(R.id.et_add_friend);
+                btAddFriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addFriend(new User(etFriendToAdd.getText().toString()));
+                    }
+                });
+
+                btBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        actionBar.setCustomView(null);
+                        add.setVisible(true);
+                        setting.setVisible(true);
+                    }
+                });
                 break;
         }
         return super.onOptionsItemSelected(item);

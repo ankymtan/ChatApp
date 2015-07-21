@@ -52,7 +52,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/add_friend"></ListView>
+        android:layout_below="@+id/textView2"></ListView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -89,41 +89,8 @@
         android:nestedScrollingEnabled="true"
         android:paddingBottom="10dp"
         android:layout_below="@+id/edit_account"
-        android:layout_alignLeft="@+id/add_friend"
-        android:layout_alignStart="@+id/add_friend" />
-
-    <EditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_friend"
-        android:imeActionLabel="Add"
-        android:imeOptions="actionSend"
-        android:hint="Add more friend here."
-        android:background="@color/green"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        android:gravity="center_horizontal"
-        android:imeActionId="@+id/add_friend_action"
-        android:layout_below="@+id/textView2"
-        android:layout_toLeftOf="@+id/logout"
-        android:layout_toStartOf="@+id/logout"
-        android:padding="10dp" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:id="@+id/bt_add"
-        android:layout_alignTop="@+id/add_friend"
-        android:layout_alignLeft="@+id/logout"
-        android:layout_alignStart="@+id/logout"
-        android:background="@color/blue"
-        android:layout_alignBottom="@+id/add_friend"
-        android:textColor="@color/white"
-        android:textSize="30dp">
-    </Button>
-
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
