@@ -16,8 +16,7 @@
 
         <activity
             android:name="com.ankymtan.couplechat.ActivityMain"
-            android:label="Couple Chat"
-            android:windowSoftInputMode="stateHidden">
+            android:label="Couple Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

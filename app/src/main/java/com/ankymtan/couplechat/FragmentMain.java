@@ -17,7 +17,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -227,8 +225,8 @@ public class FragmentMain extends Fragment {
         actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.item_current_friend);
-        TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
-        currentFriendProfile = (ImageView) actionBar.getCustomView().findViewById(R.id.iv_current_friend_profile);
+        TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.tv_added_friend_name);
+        currentFriendProfile = (ImageView) actionBar.getCustomView().findViewById(R.id.iv_added_friend_profile);
 
         textView.setText(userLocal.getCurrentFriend());
         tvFriendStatus = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_status);
@@ -366,7 +364,7 @@ public class FragmentMain extends Fragment {
                     delPreviousMessage();
 
                     actionBar.setCustomView(R.layout.item_current_friend);
-                    TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
+                    TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.tv_added_friend_name);
                     textView.setText(currentFriendName);
 
                     Toast.makeText(getActivity(), "Message cancelled", Toast.LENGTH_SHORT).show();
@@ -562,7 +560,7 @@ public class FragmentMain extends Fragment {
             Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_LONG).show();
             //TODO change back actionbar
             actionBar.setCustomView(R.layout.item_current_friend);
-            TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_name);
+            TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.tv_added_friend_name);
             textView.setText(currentFriendName);
             //add message to local storage
             String messageContent = "";

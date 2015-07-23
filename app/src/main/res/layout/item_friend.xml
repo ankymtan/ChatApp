@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/iv_current_friend_profile"
+        android:id="@+id/iv_added_friend_profile"
         android:src="@drawable/avatar_shape"
         android:background="@drawable/profile_empty"
         android:layout_alignParentTop="true"
@@ -20,12 +20,12 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/current_friend_name"
+        android:id="@+id/tv_added_friend_name"
         android:textColor="@color/black"
         android:gravity="center"
-        android:layout_alignTop="@+id/iv_current_friend_profile"
-        android:layout_toRightOf="@+id/iv_current_friend_profile"
-        android:layout_toEndOf="@+id/iv_current_friend_profile"
+        android:layout_alignTop="@+id/iv_added_friend_profile"
+        android:layout_toRightOf="@+id/iv_added_friend_profile"
+        android:layout_toEndOf="@+id/iv_added_friend_profile"
         android:layout_marginTop="7dp"
         android:layout_marginLeft="15dp" />
 
@@ -35,9 +35,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/new_message"
         android:textColor="@android:color/holo_blue_light"
-        android:layout_below="@+id/current_friend_name"
-        android:layout_alignLeft="@+id/current_friend_name"
-        android:layout_alignStart="@+id/current_friend_name"
+        android:layout_below="@+id/tv_added_friend_name"
+        android:layout_alignLeft="@+id/tv_added_friend_name"
+        android:layout_alignStart="@+id/tv_added_friend_name"
         android:text="asdasdasd"
         android:textSize="12dp" />
 
@@ -51,8 +51,8 @@
         android:background="@drawable/green"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_alignTop="@+id/current_friend_name"
+        android:layout_alignTop="@+id/tv_added_friend_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/current_friend_name" />
+        android:layout_alignBottom="@+id/tv_added_friend_name" />
 </RelativeLayout>

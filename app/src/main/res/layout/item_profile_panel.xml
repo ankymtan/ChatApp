@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/setting_background"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/iv_profile_pic"
+        android:background="@drawable/profile_empty"
+        android:src="@drawable/avatar_shape_blue"
+        android:layout_below="@+id/profile_email"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="username"
+        android:id="@+id/profile_username"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Email | Total friend | Male"
+        android:id="@+id/profile_email"
+        android:textColor="@color/white"
+        android:paddingBottom="5dp"
+        android:layout_below="@+id/profile_username"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="EDIT"
+        android:id="@+id/edit_account"
+        android:paddingTop="5dp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/iv_profile_pic"
+        android:layout_alignLeft="@+id/iv_profile_pic"
+        android:layout_alignStart="@+id/iv_profile_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="OUT"
+        android:id="@+id/logout"
+        android:paddingTop="5dp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/iv_profile_pic"
+        android:layout_alignRight="@+id/iv_profile_pic"
+        android:layout_alignEnd="@+id/iv_profile_pic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Friends List"
+        android:id="@+id/textView2"
+        android:paddingTop="30dp"
+        android:textSize="35dp"
+        android:nestedScrollingEnabled="true"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/edit_account"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp" />
+
+
+</RelativeLayout>

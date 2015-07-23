@@ -61,7 +61,8 @@
         android:paddingRight="@dimen/spacing"
         android:singleLine="false"
         android:textColor="@color/white"
-        android:maxWidth="250dp"/>
+        android:maxWidth="250dp"
+        android:visibility="invisible"/>
     <TextView
         android:id="@+id/tv_test_after_adding"
         style="?android:textAppearanceMedium"
@@ -70,7 +71,8 @@
         android:paddingRight="@dimen/spacing"
         android:singleLine="false"
         android:textColor="@color/white"
-        android:maxWidth="250dp"/>
+        android:maxWidth="250dp"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

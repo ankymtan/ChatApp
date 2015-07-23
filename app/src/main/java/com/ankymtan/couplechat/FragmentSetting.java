@@ -29,6 +29,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -42,12 +43,11 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
     private ArrayList<User> friendList = new ArrayList<User>();
     private ListView listView;
     private AdapterFriendList adapter;
-    private TextView tvLogout, tvEditAccount;
-    private ImageView ivProfile;
     private Socket mSocket;
     private ProfileManager profileManager;
     private ActionBar actionBar;
     private MenuItem add, setting;
+    //private TextView tvNoFriend;
 
     {
         try {
@@ -75,50 +75,36 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         userLocal = new UserLocal(getActivity());
+
+        //tvNoFriend = (TextView) view.findViewById(R.id.tv_no_friend);
+        //tvNoFriend.setVisibility(View.INVISIBLE);
         listView = (ListView) view.findViewById(R.id.profile_friend_list);
         adapter = new AdapterFriendList(friendList, getActivity());
         listView.setAdapter(adapter);
 
         initFriendList();
 
-
-        ivProfile = (ImageView) view.findViewById(R.id.iv_profile_pic);
-        tvLogout = (TextView) view.findViewById(R.id.logout);
-        tvEditAccount = (TextView) view.findViewById(R.id.edit_account);
-
-        tvLogout.setOnClickListener(this);
-        tvEditAccount.setOnClickListener(this);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                userLocal.setCurrentFriend(friendList.get(position).getName());
-                userLocal.resetNewMessageCounterFrom(friendList.get(position).getName());
+                if(position == 0){
+                    return;
+                }
+                userLocal.setCurrentFriend(friendList.get(position-1).getName());
+                userLocal.resetNewMessageCounterFrom(friendList.get(position-1).getName());
                 ((ActivityMain) getActivity()).mViewPager.setCurrentItem(0);
             }
         });
 
-        TextView profileUsername = (TextView) view.findViewById(R.id.profile_username);
-        profileUsername.setText(userLocal.getLoggedInUser().getName());
 
-        profileManager.lazyLoad(ivProfile, userLocal.getLoggedInUser().getName(), false);
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.logout:
-                Log.d("by me", "logging out");
-                logout();
-                break;
-            case R.id.edit_account:
-                Intent profileEditActivity = new Intent(getActivity(), ActivityEditProfile.class);
-                startActivity(profileEditActivity);
-                Log.d("by me", " pressing edit");
-                break;
+
         }
     }
 
@@ -132,8 +118,13 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
         actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 
+        //getCount = 1 then only have profile panel
+        //if(adapter.getCount() > 1){
+         //   tvNoFriend.setVisibility(View.INVISIBLE);
+       // }else{
+         //   tvNoFriend.setVisibility(View.VISIBLE);
+       // }
         updateFriendList();
-        profileManager.lazyLoad(ivProfile, userLocal.getLoggedInUser().getName(), false);
     }
 
     @Override
@@ -226,15 +217,7 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
         }
     }
 
-    private void logout(){
-        userLocal.clearUserData();
-        //restart app
-        Intent i = getActivity().getBaseContext().getPackageManager()
-                .getLaunchIntentForPackage(getActivity().getBaseContext().getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        getActivity().finish();
-        startActivity(i);
-    }
+
 
     private Emitter.Listener onCheckExist = new Emitter.Listener() {
         @Override
