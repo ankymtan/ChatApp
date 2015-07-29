@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.fragment;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ankymtan.couplechat.framework.ServerRequest;
+import com.ankymtan.couplechat.entity.User;
+import com.ankymtan.couplechat.framework.serverCallback;
 import com.github.nkzawa.socketio.androidchat.R;
 
 /**

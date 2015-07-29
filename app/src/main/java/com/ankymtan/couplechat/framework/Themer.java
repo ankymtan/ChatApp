@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

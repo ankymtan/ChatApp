@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.ankymtan.couplechat.Message;
-import com.ankymtan.couplechat.User;
+import com.ankymtan.couplechat.entity.Message;
+import com.ankymtan.couplechat.entity.User;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,6 +13,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+
+import com.ankymtan.couplechat.WordChecker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -118,12 +121,12 @@ public class PluginManager extends Binder{
         }
     }
 
-    protected void onStart() {
+    public void onStart() {
         Log.d(LOG_TAG, "onStart");
         context.registerReceiver(packageBroadcastReceiver, packageFilter);
     }
 
-    protected void onStop() {
+    public void onStop() {
         Log.d(LOG_TAG, "onStop");
         context.unregisterReceiver(packageBroadcastReceiver);
         releaseOpService();

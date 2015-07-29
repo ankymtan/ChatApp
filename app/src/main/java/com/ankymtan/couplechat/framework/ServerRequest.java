@@ -1,19 +1,18 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.Settings;
 
+import com.ankymtan.couplechat.entity.User;
+import com.ankymtan.couplechat.fragment.FragmentLogin;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 /**
  * Created by ankym on 23/6/2015.

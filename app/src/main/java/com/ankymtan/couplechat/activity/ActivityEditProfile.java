@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.activity;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;

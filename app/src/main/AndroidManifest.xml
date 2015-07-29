@@ -15,7 +15,7 @@
        >
 
         <activity
-            android:name="com.ankymtan.couplechat.ActivityMain"
+            android:name="com.ankymtan.couplechat.activity.ActivityMain"
             android:label="Couple Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,15 +24,17 @@
         </activity>
 
         <activity
-            android:name="com.ankymtan.couplechat.ActivityWelcome"
+            android:name="com.ankymtan.couplechat.activity.ActivityWelcome"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat"
             android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <activity
-            android:name="com.ankymtan.couplechat.ActivityEditProfile"
-            android:theme="@style/Theme.AppCompat">
+            android:name="com.ankymtan.couplechat.activity.ActivityEditProfile">
+        </activity>
+        <activity
+            android:name="com.ankymtan.couplechat.activity.ActivityChat">
         </activity>
     </application>
 </manifest>

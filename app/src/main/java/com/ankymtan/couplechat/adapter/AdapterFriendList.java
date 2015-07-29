@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ankymtan.couplechat.activity.ActivityEditProfile;
+import com.ankymtan.couplechat.entity.User;
 import com.ankymtan.couplechat.framework.ProfileManager;
+import com.ankymtan.couplechat.framework.UserLocal;
 import com.github.nkzawa.socketio.androidchat.R;
 
 import java.util.ArrayList;

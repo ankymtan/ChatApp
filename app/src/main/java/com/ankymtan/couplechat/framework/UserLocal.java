@@ -1,15 +1,12 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import com.ankymtan.couplechat.framework.MyDatabaseHelper;
+import com.ankymtan.couplechat.entity.Message;
+import com.ankymtan.couplechat.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 
 /**
  * Created by ankym on 23/6/2015.

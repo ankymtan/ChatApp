@@ -8,7 +8,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:id="@+id/iv_added_friend_profile"
-        android:src="@drawable/avatar_shape_green"
+        android:src="@drawable/avatar_shape_blue"
         android:background="@drawable/profile_empty"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"

@@ -1,17 +1,12 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.activity;
 
 
-import android.graphics.Interpolator;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.widget.Scroller;
 
+import com.ankymtan.couplechat.adapter.TabAdapterWelcome;
 import com.ankymtan.couplechat.framework.CustomScroller;
 import com.github.nkzawa.socketio.androidchat.R;
 
@@ -23,7 +18,7 @@ import java.lang.reflect.Field;
 
 public class ActivityWelcome extends FragmentActivity {
     TabAdapterWelcome tabAdapterWelcome;
-    ViewPager viewPager;
+    public ViewPager viewPager;
 
     public ActivityWelcome() {
         super();

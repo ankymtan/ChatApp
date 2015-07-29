@@ -1,10 +1,14 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
+import com.ankymtan.couplechat.activity.ActivityChat;
+import com.ankymtan.couplechat.fragment.FragmentPlugin;
+import com.ankymtan.couplechat.fragment.FragmentSetting;
 
 /**
  * Created by An on 10/6/2015.
@@ -20,9 +24,9 @@ public class TabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new FragmentMain();
-            case 1:
                 return new FragmentSetting();
+            case 1:
+                return new FragmentPlugin();
         }
         return null;
     }

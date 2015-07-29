@@ -6,12 +6,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.ankymtan.couplechat.FragmentLogin;
-import com.ankymtan.couplechat.UserLocal;
+import com.ankymtan.couplechat.fragment.FragmentLogin;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -22,10 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.Future;
 

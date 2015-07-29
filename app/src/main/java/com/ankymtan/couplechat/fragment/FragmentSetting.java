@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,14 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ankymtan.couplechat.activity.ActivityChat;
+import com.ankymtan.couplechat.adapter.AdapterFriendList;
+import com.ankymtan.couplechat.entity.User;
+import com.ankymtan.couplechat.framework.UserLocal;
+import com.ankymtan.couplechat.activity.ActivityMain;
 import com.ankymtan.couplechat.framework.ProfileManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
@@ -29,7 +31,7 @@ import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -91,9 +93,11 @@ public class FragmentSetting extends android.support.v4.app.Fragment implements 
                 if(position == 0){
                     return;
                 }
-                userLocal.setCurrentFriend(friendList.get(position-1).getName());
-                userLocal.resetNewMessageCounterFrom(friendList.get(position-1).getName());
-                ((ActivityMain) getActivity()).mViewPager.setCurrentItem(0);
+                userLocal.setCurrentFriend(friendList.get(position - 1).getName());
+                userLocal.resetNewMessageCounterFrom(friendList.get(position - 1).getName());
+
+                Intent activityChat = new Intent(getActivity(), ActivityChat.class);
+                getActivity().startActivity(activityChat);
             }
         });
 

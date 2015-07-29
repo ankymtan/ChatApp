@@ -1,4 +1,6 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
+
+import com.ankymtan.couplechat.entity.User;
 
 /**
  * Created by ankym on 23/6/2015.

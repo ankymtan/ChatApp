@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.entity;
 
 /**
  * Created by ankym on 23/6/2015.

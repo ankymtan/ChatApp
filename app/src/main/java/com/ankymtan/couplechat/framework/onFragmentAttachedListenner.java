@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.framework;
 
 /**
  * Created by An on 11/6/2015.

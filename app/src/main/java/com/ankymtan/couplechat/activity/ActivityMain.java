@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,14 +12,17 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 
+import com.ankymtan.couplechat.adapter.TabAdapter;
+import com.ankymtan.couplechat.framework.UserLocal;
 import com.ankymtan.couplechat.framework.CustomScroller;
+import com.ankymtan.couplechat.framework.onFragmentAttachedListenner;
 import com.github.nkzawa.socketio.androidchat.R;
 
 import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ActivityMain extends ActionBarActivity implements onFragmentAttachedListenner{
+public class ActivityMain extends ActionBarActivity implements onFragmentAttachedListenner {
 
     private static final String BY_ME = "by me";
     private static final int REQUEST_LOGIN= 0;
@@ -27,14 +30,14 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     private TimerTask timerTask;
     private Timer timer = new Timer();
 
-    ViewPager mViewPager;
+    public ViewPager mViewPager;
     private String mUsername;
 
 
     private int selectedFragment;
-    private FragmentMain mainFragment;
+    private ActivityChat mainFragment;
     private int x,y;
-    private Backgrounder background;
+    //private Backgrounder background;
     private UserLocal userLocal;
 
     public ActivityMain() {
@@ -59,12 +62,11 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         x = size.x;
         y = size.y;
         //
-        background = (Backgrounder) findViewById(R.id.background);
+        //background = (Backgrounder) findViewById(R.id.background);
         mTabAdapter = new TabAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabAdapter);
         mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setCurrentItem(1);
 
         try {
             Field mScroller = ViewPager.class.getDeclaredField("mScroller");
@@ -78,6 +80,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         }
         //
         //work for background
+        /*
         final Runnable backgroundUpdate = new Runnable() {
             @Override
             public void run() {
@@ -109,6 +112,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0 , 5000);
+        */
         if(userLocal.isLoggedIn()){
             mUsername = userLocal.getLoggedInUser().getName();
             Log.d(BY_ME, "logged user" + mUsername);
@@ -128,7 +132,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         }
         mUsername = data.getStringExtra("username");
     }
-
+    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -144,4 +148,5 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
     public Backgrounder getBackground(){
         return background;
     }
+    */
 }

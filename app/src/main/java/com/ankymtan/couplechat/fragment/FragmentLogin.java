@@ -1,4 +1,4 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ankymtan.couplechat.framework.ServerRequest;
+import com.ankymtan.couplechat.entity.User;
+import com.ankymtan.couplechat.framework.UserLocal;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.androidchat.R;
 import com.github.nkzawa.socketio.client.IO;
@@ -38,7 +41,7 @@ public class FragmentLogin extends Fragment implements View.OnClickListener {
     private static final String BY_ME = "by me";
     //public static final String ADDRESS = "http://192.168.0.9:3000";
     //public static final String ADDRESS = "http://10.27.4.174:3000";
-    public static final String ADDRESS = "http://192.168.43.202:3000";
+    public static final String ADDRESS = "http://192.168.0.100:3000";
     private EditText usernameEt, passwordEt;
     private String mUsername;
     private Socket mSocket;

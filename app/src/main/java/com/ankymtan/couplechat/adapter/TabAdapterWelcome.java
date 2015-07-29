@@ -1,10 +1,14 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+
+import com.ankymtan.couplechat.fragment.FragmentLogin;
+import com.ankymtan.couplechat.fragment.FragmentRegister;
+import com.ankymtan.couplechat.fragment.FragmentWelcome;
 
 /**
  * Created by An on 20/6/2015.

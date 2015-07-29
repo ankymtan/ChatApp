@@ -1,9 +1,8 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.entity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -18,7 +17,8 @@ import android.view.WindowManager;
 
 import java.util.Random;
 
-import com.github.nkzawa.socketio.androidchat.R;
+import com.ankymtan.couplechat.framework.Themer;
+import com.ankymtan.couplechat.framework.UserLocal;
 
 /**
  * Created by An on 27/5/2015.

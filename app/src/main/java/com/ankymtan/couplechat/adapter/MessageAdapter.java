@@ -1,10 +1,9 @@
-package com.ankymtan.couplechat;
+package com.ankymtan.couplechat.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ankymtan.couplechat.entity.Message;
+import com.ankymtan.couplechat.framework.Themer;
+import com.ankymtan.couplechat.framework.UserLocal;
 import com.github.nkzawa.socketio.androidchat.R;
 
 import java.util.List;
@@ -25,8 +27,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Themer themer;
     private UserLocal userLocal;
     private String loggedInUserName;
-    private Drawable left, right;
+    private Drawable leftHead, rightHead, leftTail, rightTail;
     private TextView tvTest;
+    private boolean isLeftHead = true, isRightHead = true;
 
 
     public MessageAdapter(Context context, List<Message> messages, TextView tvTest) {
@@ -35,8 +38,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         userLocal = new UserLocal(context);
 
         loggedInUserName = userLocal.getLoggedInUser().getName();
-        left = themer.getDrawable("left");
-        right = themer.getDrawable("right");
+
+        leftHead = context.getResources().getDrawable(R.drawable.left);
+        rightHead = context.getResources().getDrawable(R.drawable.right);
+        leftTail = context.getResources().getDrawable(R.drawable.left_tail);
+        rightTail = context.getResources().getDrawable(R.drawable.right_tail);
 
         this.tvTest = tvTest;
     }
@@ -73,6 +79,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        if(position>0){
+            Message previousMessage = mMessages.get(position-1);
+            if (previousMessage.getType() > previousMessage.TYPE_ACTION && previousMessage.getUsernameFrom().equals(loggedInUserName)) {
+                isRightHead = false;
+                isLeftHead = true;
+            }else if(previousMessage.getType() > previousMessage.TYPE_ACTION && previousMessage.getUsernameFrom().equals("system advice")) {
+                isRightHead = false;
+                isLeftHead = true;
+            }else{
+                isRightHead = true;
+                isLeftHead = false;
+            }
+        }else{
+            isRightHead = true;
+            isLeftHead = false;
+        }
         Message message = mMessages.get(position);
         viewHolder.setMessage(message.getMessage());
         viewHolder.setUsername(message.getUsernameFrom());
@@ -140,16 +162,30 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public void setLeft() {
             if (null == messageLayout) return;
+
             messageLayout.setGravity(Gravity.LEFT);
-            Drawable cloneLeft = left.getConstantState().newDrawable();
-            messageBackground.setBackground(cloneLeft);
+
+            if(isLeftHead){
+                Drawable cloneLeftHead = leftHead.getConstantState().newDrawable();
+                messageBackground.setBackground(cloneLeftHead);
+            }else {
+                Drawable cloneLeftTail = leftTail.getConstantState().newDrawable();
+                messageBackground.setBackground(cloneLeftTail);
+            }
         }
 
         public void setRight() {
             if (null == messageLayout) return;
+
             messageLayout.setGravity(Gravity.RIGHT);
-            Drawable cloneRight = right.getConstantState().newDrawable();
-            messageBackground.setBackground(cloneRight);
+
+            if(isRightHead){
+                Drawable cloneRightHead = rightHead.getConstantState().newDrawable();
+                messageBackground.setBackground(cloneRightHead);
+            }else {
+                Drawable cloneRightTail = rightTail.getConstantState().newDrawable();
+                messageBackground.setBackground(cloneRightTail);
+            }
         }
 
         public void setAdvice() {
