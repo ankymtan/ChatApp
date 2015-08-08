@@ -43,4 +43,7 @@ dependencies {
     compile 'com.github.nkzawa:socket.io-client:0.5.0'
     compile 'com.koushikdutta.ion:ion:2.+'
     compile 'com.koushikdutta.async:androidasync:2.+'
+    compile 'com.jpardogo.materialtabstrip:library:1.1.0'
+    compile "com.android.support:appcompat-v7:22.1.0"
+
 }

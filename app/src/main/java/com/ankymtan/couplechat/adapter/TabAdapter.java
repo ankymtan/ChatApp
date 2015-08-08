@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.ankymtan.couplechat.activity.ActivityChat;
 import com.ankymtan.couplechat.fragment.FragmentPlugin;
+import com.ankymtan.couplechat.fragment.FragmentAccount;
 import com.ankymtan.couplechat.fragment.FragmentSetting;
 
 /**
@@ -16,6 +16,7 @@ import com.ankymtan.couplechat.fragment.FragmentSetting;
 public class TabAdapter extends FragmentPagerAdapter {
 
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
+    String[] pageTitles = {"Account","Plugin","Setting"};
 
     public TabAdapter(FragmentManager fm){
         super(fm);
@@ -24,16 +25,18 @@ public class TabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new FragmentSetting();
+                return new FragmentAccount();
             case 1:
                 return new FragmentPlugin();
+            case 2:
+                return new FragmentSetting();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 2; // Number of tabs
+        return 3; // Number of tabs
     }
 
     @Override
@@ -51,5 +54,10 @@ public class TabAdapter extends FragmentPagerAdapter {
 
     public Fragment getRegisteredFragment(int position){
         return registeredFragments.get(position);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return pageTitles[position];
     }
 }

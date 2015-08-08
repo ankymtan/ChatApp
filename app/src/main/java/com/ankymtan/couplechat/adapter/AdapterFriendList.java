@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.ankymtan.couplechat.activity.ActivityEditProfile;
 import com.ankymtan.couplechat.entity.User;
 import com.ankymtan.couplechat.framework.ProfileManager;
 import com.ankymtan.couplechat.framework.UserLocal;
+import com.ankymtan.couplechat.framework.onAddFriendListener;
 import com.github.nkzawa.socketio.androidchat.R;
 
 import java.util.ArrayList;
@@ -26,12 +28,14 @@ import java.util.ArrayList;
 public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClickListener {
 
     private final static int VIEW_TYPE_PROFILE_PANEL = 0;
-    private final static int VIEW_TYPE_FRIEND_ITEM = 1;
+    private final static int VIEW_TYPE_ADD_FRIEND_VIEW = 1;
+    private final static int VIEW_TYPE_FRIEND_ITEM = 2;
 
     private ArrayList<User> friendList;
     private Context context;
     private ProfileManager profileManager;
     private UserLocal userLocal;
+    private onAddFriendListener onAddFriendListener;
 
 
     public AdapterFriendList(ArrayList<User> friendList, Context context) {
@@ -80,6 +84,30 @@ public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClic
 
                 return convertView;
 
+            case VIEW_TYPE_ADD_FRIEND_VIEW:
+                viewHolder = (ViewHolderItem) convertView.getTag();
+                if (convertView == null || viewHolder.friendName == null) {
+                    viewHolder = new ViewHolderItem();
+                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    convertView = inflater.inflate(R.layout.item_add_friend, parent, false);
+
+                    viewHolder.etAddFriend = (EditText) convertView.findViewById(R.id.et_add_friend);
+                    viewHolder.ivAddFriend = (ImageView) convertView.findViewById(R.id.bt_add_friend);
+                    convertView.setTag(viewHolder);
+
+                }
+
+                final ViewHolderItem tempViewHolder = viewHolder;
+                viewHolder.ivAddFriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        User user = new User(tempViewHolder.etAddFriend.getText().toString());
+                        onAddFriendListener.onAddFriend(user);
+                    }
+                });
+
+                return convertView;
+
             case VIEW_TYPE_FRIEND_ITEM:
                 viewHolder = (ViewHolderItem) convertView.getTag();
                 if (convertView == null || viewHolder.friendName == null) {
@@ -96,7 +124,7 @@ public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClic
                 //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 //convertView = inflater.inflate(R.layout.item_friend, parent, false);
 
-                User friend = friendList.get(position - 1);
+                User friend = friendList.get(position - 2);
                 Log.d("By me", friend.getName() + "  " + friend.getUnreadCounter() + " position: " + position);
                 viewHolder.friendName.setText(friend.getName());
                 //set unread message counter
@@ -115,7 +143,7 @@ public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClic
 
     @Override
     public int getCount() {
-        return friendList.size() + 1;
+        return friendList.size() + 2;
     }
 
     @Override
@@ -163,6 +191,9 @@ public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClic
         if (position == 0) {
             return VIEW_TYPE_PROFILE_PANEL;
         }
+        if (position == 1) {
+            return VIEW_TYPE_ADD_FRIEND_VIEW;
+        }
         return VIEW_TYPE_FRIEND_ITEM;
     }
 
@@ -172,6 +203,12 @@ public class AdapterFriendList extends ArrayAdapter<User> implements View.OnClic
         TextView profileUsername;
         TextView friendName;
         TextView tvNewMessage;
+        EditText etAddFriend;
+        ImageView ivAddFriend;
+    }
+
+    public void setOnAddFriendListener(onAddFriendListener onAddFriendListener){
+        this.onAddFriendListener = onAddFriendListener;
     }
 
 }

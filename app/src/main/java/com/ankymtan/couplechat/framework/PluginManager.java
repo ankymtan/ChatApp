@@ -26,18 +26,16 @@ import java.util.List;
  */
 public class PluginManager extends Binder{
     public static final String ACTION_PICK_PLUGIN = "aexp.intent.action.PICK_PLUGIN";
-    static final String KEY_PKG = "pkg";
-    static final String KEY_SERVICENAME = "servicename";
-    static final String KEY_ACTIONS = "actions";
-    static final String KEY_CATEGORIES = "categories";
-    static final String BUNDLE_EXTRAS_CATEGORY = "category";
-    static final String LOG_TAG = "PluginManager";
-    static final String CATEGORIES = "aexp.intent.category.WORD_CHECKER_PLUGIN";
-    static final String BY_ME = "by me";
+    public static final String KEY_PKG = "pkg";
+    public static final String KEY_SERVICENAME = "servicename";
+    public static final String KEY_ACTIONS = "actions";
+    public static final String KEY_CATEGORIES = "categories";
+    public static final String BUNDLE_EXTRAS_CATEGORY = "category";
+    public static final String LOG_TAG = "by me PluginManager";
+    public static final String CATEGORIES = "aexp.intent.category.WORD_CHECKER_PLUGIN";
+    public static final String BY_ME = "by me";
+
     private Context context;
-
-
-
     private PackageBroadcastReceiver packageBroadcastReceiver;
     private IntentFilter packageFilter;
     private ArrayList<HashMap<String, String>> services;
@@ -211,6 +209,9 @@ public class PluginManager extends Binder{
 
         return explicitIntent;
     }
-
     //get service here
+    public ArrayList<HashMap<String, String>> getAllServices(){
+        Log.d(LOG_TAG, "get all services: "+services+"");
+        return services;
+    }
 }

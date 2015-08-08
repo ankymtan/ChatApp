@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
@@ -13,10 +13,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+
+
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"/>
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="60dp"
+        />
 
-</FrameLayout>
+    <com.ankymtan.couplechat.framework.SlidingTabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/blue"
+        android:textColor="@color/white"
+        android:layout_gravity="right"/>
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width ="40dp"
+        android:layout_height ="40dp"
+        android:src="@drawable/icon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"/>
+</RelativeLayout>

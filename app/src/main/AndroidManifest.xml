@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.nkzawa.socketio.androidchat"
-    android:sharedUserId="com.myApp.sharedUserId"
-    android:process="com.myApp.process">
+    android:process="com.myApp.process"
+    android:sharedUserId="com.myApp.sharedUserId">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:hardwareAccelerated="false"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="Couple Chat"
-        android:theme="@style/MyTheme"
-       >
+        android:theme="@style/MyTheme">
 
         <activity
             android:name="com.ankymtan.couplechat.activity.ActivityMain"
-            android:label="Couple Chat">
+            android:label="Couple Chat"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,14 +27,22 @@
             android:name="com.ankymtan.couplechat.activity.ActivityWelcome"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
+            android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity android:name="com.ankymtan.couplechat.activity.ActivityEditProfile"></activity>
+        <activity android:name="com.ankymtan.couplechat.activity.ActivityChat"></activity>
 
         <activity
-            android:name="com.ankymtan.couplechat.activity.ActivityEditProfile">
-        </activity>
+            android:name="com.ankymtan.couplechat.activity.ActivityChooseFriend"
+            android:label="Chose Friend"></activity>
+
         <activity
-            android:name="com.ankymtan.couplechat.activity.ActivityChat">
-        </activity>
+            android:name="com.ankymtan.couplechat.activity.ActivityChooseManager"
+            android:label="Chose Manager"></activity>
+
+        <activity
+            android:name="com.ankymtan.couplechat.activity.ActivityPluginSetting"
+            android:label="Chose Manager"></activity>
+
     </application>
 </manifest>

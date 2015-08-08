@@ -25,6 +25,11 @@
     <color name="white_transparent">#C8ffffff</color>
     <color name="green">#99C900</color>
     <color name="orange_light">#ffbb33</color>
+    <color name="ColorPrimary">#e62117</color>
+    <color name="ColorPrimaryDark">#c31c13</color>
+    <color name="tabsScrollColor">#8a140e</color>
+    <color name="white_transparent_bright">#AAFFFFFF</color>
+
 
     <array name="username_colors">
         <item>@color/username0</item>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 
 import com.ankymtan.couplechat.adapter.TabAdapter;
+import com.ankymtan.couplechat.framework.SlidingTabLayout;
 import com.ankymtan.couplechat.framework.UserLocal;
 import com.ankymtan.couplechat.framework.CustomScroller;
 import com.ankymtan.couplechat.framework.onFragmentAttachedListenner;
@@ -22,17 +24,17 @@ import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ActivityMain extends ActionBarActivity implements onFragmentAttachedListenner {
+public class ActivityMain extends FragmentActivity implements onFragmentAttachedListenner {
 
     private static final String BY_ME = "by me";
     private static final int REQUEST_LOGIN= 0;
     private TabAdapter mTabAdapter;
+    private SlidingTabLayout slidingTabLayout;
     private TimerTask timerTask;
     private Timer timer = new Timer();
 
     public ViewPager mViewPager;
     private String mUsername;
-
 
     private int selectedFragment;
     private ActivityChat mainFragment;
@@ -78,6 +80,17 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.tabs);
+        //slidingTabLayout.setDistributeEvenly(true);
+        slidingTabLayout.setViewPager(mViewPager);
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.white);
+            }
+        });
+
         //
         //work for background
         /*
@@ -132,6 +145,7 @@ public class ActivityMain extends ActionBarActivity implements onFragmentAttache
         }
         mUsername = data.getStringExtra("username");
     }
+
     /*
     @Override
     protected void onResume() {
