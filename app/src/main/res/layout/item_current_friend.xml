@@ -5,14 +5,22 @@
     android:id="@+id/item_friend_layout">
 
     <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/back"
+        android:id="@+id/iv_back"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+    <ImageView
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:id="@+id/iv_added_friend_profile"
         android:src="@drawable/avatar_shape_blue"
         android:background="@drawable/profile_empty"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toRightOf="@+id/iv_back"
+        android:layout_toEndOf="@+id/iv_back" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,6 +45,7 @@
         android:layout_alignBottom="@+id/iv_added_friend_profile"
         android:layout_alignLeft="@+id/tv_added_friend_name"
         android:layout_alignStart="@+id/tv_added_friend_name"
-        android:textSize="13dp"/>
+        android:textSize="13dp"
+        android:text="Offline" />
 
 </RelativeLayout>

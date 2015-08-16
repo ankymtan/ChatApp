@@ -8,6 +8,7 @@ public class Message {
     public static final int TYPE_MESSAGE_RIGHT = 2;
     public static final int TYPE_MESSAGE_BOTTOM = 3;
     public static final int TYPE_MESSAGE_BOTTOM_RIGHT = 4;
+    public static final int TYPE_MESSAGE_ADVICE = 5;
 
     private int type;
     private String message;

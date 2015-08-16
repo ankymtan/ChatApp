@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,5 +48,12 @@ public class ActivityChooseFriend extends AppCompatActivity{
         TextView tvTitle = (TextView) mCustomView.findViewById(R.id.tv_activity_name);
         tvTitle.setText("Chose Friend");
 
+        ImageView ivBack = (ImageView) mCustomView.findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }

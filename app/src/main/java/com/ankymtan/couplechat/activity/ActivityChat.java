@@ -218,6 +218,14 @@ public class ActivityChat extends ActionBarActivity {
         tvFriendStatus = (TextView) actionBar.getCustomView().findViewById(R.id.current_friend_status);
         getOnlineStatus();
         profileManager.lazyLoad(currentFriendProfile, userLocal.getCurrentFriend(), false);
+
+        ImageView ivBack = (ImageView) actionBar.getCustomView().findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -329,8 +337,8 @@ public class ActivityChat extends ActionBarActivity {
         }
 
         if (adviceMessage != null) {
-            addMessage(new Message.Builder(Message.TYPE_MESSAGE_BOTTOM).message(adviceMessage)
-                    .usernameFrom("system advice").usernameTo(currentFriendName).GMT(getGMT()).build());
+            addMessage(new Message.Builder(Message.TYPE_MESSAGE_ADVICE).message(adviceMessage)
+                    .usernameFrom(currentFriendName).usernameTo(loggedInUsername).GMT(getGMT()).build());
             //when recognized a negative mess
             if (!pluginManager.isPositive()) {
                 mNegativeMessageHandler.postDelayed(onRethinkingTimeout, RETHINKING_TIMER_LENGTH);
@@ -376,8 +384,8 @@ public class ActivityChat extends ActionBarActivity {
                 userLocal.addMessage(new Message.Builder(messageType).usernameFrom(loggedInUsername)
                         .usernameTo(currentFriendName).GMT(getGMT()).message(message).build());
 
-                userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE_BOTTOM).message(adviceMessage)
-                        .usernameFrom("system advice").usernameTo(currentFriendName).GMT(getGMT()).build());
+                userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE_ADVICE).message(adviceMessage)
+                        .usernameFrom(currentFriendName).usernameTo(loggedInUsername).GMT(getGMT()).build());
             }
         }else{
             //if advice message == null, normal message
@@ -586,8 +594,8 @@ public class ActivityChat extends ActionBarActivity {
             Message message = new Message.Builder(messageType).usernameFrom(loggedInUsername)
                     .usernameTo(currentFriendName).GMT(getGMT()).message(messageContent).build();
             userLocal.addMessage(message);
-            userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE_BOTTOM).message(adviceMessage)
-                    .usernameFrom("system advice").usernameTo(currentFriendName).GMT(getGMT()).build());
+            userLocal.addMessage(new Message.Builder(Message.TYPE_MESSAGE_ADVICE).message(adviceMessage)
+                    .usernameFrom(currentFriendName).usernameTo(loggedInUsername).GMT(getGMT()).build());
         }
     };
 

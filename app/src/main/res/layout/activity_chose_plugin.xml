@@ -17,5 +17,6 @@
         android:id="@+id/editText"
         android:layout_above="@+id/button"
         android:layout_centerHorizontal="true"
-        android:hint="Name of your manager" />
+        android:hint="Plugin name"
+        android:gravity="center"/>
 </RelativeLayout>

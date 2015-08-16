@@ -52,6 +52,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layout = -1;
         switch (viewType) {
+            case Message.TYPE_MESSAGE_ADVICE:
+                layout = R.layout.item_message_advice;
+                break;
             case Message.TYPE_MESSAGE_RIGHT:
                 layout = R.layout.item_message_time_right;
                 break;
@@ -84,7 +87,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             if (previousMessage.getType() > previousMessage.TYPE_ACTION && previousMessage.getUsernameFrom().equals(loggedInUserName)) {
                 isRightHead = false;
                 isLeftHead = true;
-            }else if(previousMessage.getType() > previousMessage.TYPE_ACTION && previousMessage.getUsernameFrom().equals("system advice")) {
+            }else if(previousMessage.getType() == Message.TYPE_MESSAGE_ADVICE) {
                 isRightHead = false;
                 isLeftHead = true;
             }else{
@@ -103,7 +106,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         //set right/left side
         if (message.getType() > message.TYPE_ACTION && message.getUsernameFrom().equals(loggedInUserName)) {
             viewHolder.setRight();
-        }else if(message.getType() > message.TYPE_ACTION && message.getUsernameFrom().equals("system advice")) {
+        }else if(message.getType() == Message.TYPE_MESSAGE_ADVICE) {
             viewHolder.setAdvice();
         }else{
             viewHolder.setLeft();

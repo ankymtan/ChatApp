@@ -37,7 +37,7 @@
             android:label="Chose Friend"></activity>
 
         <activity
-            android:name="com.ankymtan.couplechat.activity.ActivityChooseManager"
+            android:name="com.ankymtan.couplechat.activity.ActivityChoosePlugin"
             android:label="Chose Manager"></activity>
 
         <activity

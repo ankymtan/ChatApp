@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -23,7 +21,6 @@ import com.ankymtan.couplechat.activity.ActivityChat;
 import com.ankymtan.couplechat.adapter.AdapterFriendList;
 import com.ankymtan.couplechat.entity.User;
 import com.ankymtan.couplechat.framework.UserLocal;
-import com.ankymtan.couplechat.activity.ActivityMain;
 import com.ankymtan.couplechat.framework.ProfileManager;
 import com.ankymtan.couplechat.framework.onAddFriendListener;
 import com.github.nkzawa.emitter.Emitter;
@@ -71,7 +68,7 @@ public class FragmentAccount extends android.support.v4.app.Fragment implements 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
         return view;
     }
 
@@ -131,44 +128,6 @@ public class FragmentAccount extends android.support.v4.app.Fragment implements 
          //   tvNoFriend.setVisibility(View.VISIBLE);
        // }
         updateFriendList();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.setting:
-
-                // Get the layout inflater
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View alertView = inflater.inflate(R.layout.alert_setting,null);
-                //create a alert for adding friend
-                alertAddFriend = new AlertDialog.Builder(getActivity());
-                alertAddFriend.setTitle("Setting");
-                alertAddFriend.setView(alertView);
-
-
-                final Switch enableBackground = (Switch) alertView.findViewById(R.id.enable_background);
-                final Switch enableAnimation = (Switch) alertView.findViewById(R.id.enable_animation);
-
-                enableBackground.setChecked(userLocal.getEnableBackground());
-                enableAnimation.setChecked(userLocal.getEnableAnimation());
-
-                alertAddFriend.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        userLocal.setEnableBackground(enableBackground.isChecked());
-                        userLocal.setEnableAnimation(enableAnimation.isChecked());
-                    }
-                });
-
-                alertAddFriend.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Canceled.
-                    }
-                });
-                alertAddFriend.show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void addFriend(User user){

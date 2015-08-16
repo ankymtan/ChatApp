@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.nkzawa.socketio.androidchat.R;
@@ -13,11 +14,11 @@ import com.github.nkzawa.socketio.androidchat.R;
 /**
  * Created by ankym on 8/8/2015.
  */
-public class ActivityChooseManager extends AppCompatActivity{
+public class ActivityChoosePlugin extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chose_manager);
+        setContentView(R.layout.activity_chose_plugin);
 
         //change actionbar layout
         ActionBar actionBar = getSupportActionBar();
@@ -31,6 +32,14 @@ public class ActivityChooseManager extends AppCompatActivity{
         actionBar.setCustomView(mCustomView);
 
         TextView tvTitle = (TextView) mCustomView.findViewById(R.id.tv_activity_name);
-        tvTitle.setText("Chose Manager");
+        tvTitle.setText("Chose Plugin");
+
+        ImageView ivBack = (ImageView) mCustomView.findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
